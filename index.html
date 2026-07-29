@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Saikiran Andey, Data Scientist</title>
+<meta name="description" content="Data scientist working where commercial analytics meets causal inference. Builder of HEOR Studio, tableau-lineage.com, and Eigen-Rho.">
+<meta property="og:title" content="Saikiran Andey, Data Scientist">
+<meta property="og:description" content="Causal inference, commercial analytics, and AI products that verify their own numbers.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='18' fill='%23101018'/><circle cx='30' cy='60' r='7' fill='%237c86ff'/><circle cx='62' cy='32' r='7' fill='white'/><circle cx='72' cy='72' r='7' fill='white'/><path d='M30 60 62 32M30 60 72 72' stroke='white' stroke-width='3' opacity='.5'/></svg>">
+<style>
+  :root {
+    --bg: oklch(0.17 0.014 274);
+    --bg-deep: oklch(0.135 0.012 274);
+    --ink: oklch(0.955 0.006 274);
+    --dim: oklch(0.68 0.02 274);
+    --faint: oklch(0.42 0.02 274);
+    --accent: oklch(0.74 0.145 272);
+    --accent-deep: oklch(0.58 0.19 272);
+    --line: oklch(0.28 0.018 274);
+    --mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
+    --sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: var(--sans);
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.6;
+    font-size: 1.0625rem;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: clip;
+  }
+  ::selection { background: var(--accent-deep); color: white; }
+
+  /* signature canvas lives behind everything */
+  #graph { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+  .grain { position: relative; z-index: 1; }
+
+  /* scroll progress */
+  #progress {
+    position: fixed; top: 0; left: 0; height: 2px; width: 100%;
+    background: var(--accent); transform-origin: 0 50%; transform: scaleX(0);
+    z-index: 50;
+  }
+
+  .wrap { max-width: 62rem; margin: 0 auto; padding: 0 clamp(1.25rem, 4vw, 2.5rem); }
+
+  /* ---------- hero ---------- */
+  .hero { min-height: 100svh; display: flex; flex-direction: column; justify-content: center; position: relative; }
+  .hero .kicker {
+    font-family: var(--mono); font-size: 0.85rem; color: var(--accent);
+    margin-bottom: 1.4rem;
+  }
+  .hero h1 {
+    font-size: clamp(3rem, 11vw, 6rem);
+    font-weight: 800; letter-spacing: -0.035em; line-height: 0.98;
+    text-wrap: balance;
+  }
+  .hero .tag {
+    margin-top: 1.6rem; font-size: clamp(1.1rem, 2.5vw, 1.35rem);
+    color: var(--dim); max-width: 44ch; line-height: 1.5; text-wrap: pretty;
+  }
+  .hero .tag b { color: var(--ink); font-weight: 600; }
+  .cta-row { margin-top: 2.6rem; display: flex; flex-wrap: wrap; gap: 0.9rem; align-items: center; }
+  .btn {
+    display: inline-block; text-decoration: none; font-weight: 600; font-size: 0.98rem;
+    padding: 0.85rem 1.6rem; border-radius: 999px; color: var(--ink);
+    border: 1px solid var(--line);
+    transition: border-color 0.25s cubic-bezier(0.22,1,0.36,1), background 0.25s cubic-bezier(0.22,1,0.36,1);
+    will-change: transform;
+  }
+  .btn:hover { border-color: var(--accent); }
+  .btn.solid { background: var(--ink); color: var(--bg-deep); border-color: var(--ink); }
+  .btn.solid:hover { background: var(--accent); border-color: var(--accent); color: white; }
+  .hero .quiet-links { margin-top: 1.6rem; display: flex; gap: 1.6rem; }
+  .scroll-hint {
+    position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%);
+    font-family: var(--mono); font-size: 0.75rem; color: var(--faint); letter-spacing: 0.15em;
+  }
+
+  /* rolling links */
+  .roll { position: relative; display: inline-block; overflow: hidden; vertical-align: bottom; text-decoration: none; color: var(--dim); font-size: 0.95rem; }
+  .roll > span { display: block; transition: transform 0.4s cubic-bezier(0.76, 0, 0.24, 1); }
+  .roll > span::after { content: attr(data-t); position: absolute; top: 100%; left: 0; color: var(--accent); }
+  .roll:hover > span, .roll:focus-visible > span { transform: translateY(-100%); }
+
+  /* ---------- proof set piece ---------- */
+  .proof { padding: clamp(5rem, 14vh, 9rem) 0; text-align: center; position: relative; }
+  .proof .big {
+    font-family: var(--mono); font-weight: 700;
+    font-size: clamp(3.4rem, 13vw, 6rem); letter-spacing: -0.03em; line-height: 1;
+    font-variant-numeric: tabular-nums; color: var(--ink);
+  }
+  .proof .big .ok { color: var(--accent); }
+  .proof .cap { margin-top: 1rem; color: var(--dim); font-size: clamp(1rem, 2.2vw, 1.15rem); }
+  .proof .stamp {
+    display: inline-block; margin-top: 1.6rem; font-family: var(--mono); font-size: 0.8rem;
+    letter-spacing: 0.18em; color: var(--accent); border: 1px solid var(--accent);
+    padding: 0.45rem 1rem; border-radius: 4px; opacity: 0.9;
+  }
+  .proof .sub { margin-top: 2.2rem; color: var(--faint); font-size: 0.95rem; }
+  .proof .sub a { color: var(--dim); }
+
+  /* ---------- sections ---------- */
+  section.block { padding: clamp(3.5rem, 9vh, 6.5rem) 0; border-top: 1px solid var(--line); position: relative; }
+  h2 {
+    font-size: clamp(1.7rem, 4.5vw, 2.6rem); font-weight: 750; letter-spacing: -0.025em;
+    margin-bottom: clamp(1.8rem, 4vw, 2.8rem); text-wrap: balance;
+  }
+  h2 .idx { font-family: var(--mono); font-size: 0.55em; color: var(--faint); vertical-align: 0.5em; margin-right: 0.4em; font-weight: 500; }
+  .lede { color: var(--dim); max-width: 62ch; text-wrap: pretty; font-size: 1.1rem; }
+  .lede b { color: var(--ink); font-weight: 600; }
+  a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+
+  /* experience */
+  .job { display: grid; grid-template-columns: 9rem 1fr; gap: 1.5rem; padding: 1.7rem 0; border-top: 1px solid var(--line); }
+  .job:first-of-type { border-top: none; padding-top: 0; }
+  .job .when { font-family: var(--mono); font-size: 0.82rem; color: var(--faint); padding-top: 0.35rem; }
+  .job h3 { font-size: 1.18rem; font-weight: 680; letter-spacing: -0.01em; }
+  .job h3 span { color: var(--dim); font-weight: 450; }
+  .job .where { color: var(--faint); font-size: 0.92rem; margin-top: 0.15rem; }
+  .job ul { margin: 0.7rem 0 0 1.1rem; color: var(--dim); }
+  .job li { margin-bottom: 0.45rem; text-wrap: pretty; }
+  .job li b { color: var(--ink); font-weight: 600; }
+  @media (max-width: 640px) { .job { grid-template-columns: 1fr; gap: 0.3rem; } }
+
+  /* projects */
+  .project {
+    padding: 2.2rem 0; border-top: 1px solid var(--line);
+    display: grid; grid-template-columns: 1fr auto; gap: 0.4rem 2rem; align-items: baseline;
+  }
+  .project:first-of-type { border-top: none; padding-top: 0; }
+  .project h3 { font-size: clamp(1.5rem, 3.5vw, 2rem); font-weight: 720; letter-spacing: -0.02em; }
+  .project h3 a { color: var(--ink); text-decoration: none; transition: color 0.25s; }
+  .project h3 a:hover { color: var(--accent); }
+  .project .plinks { display: flex; gap: 1.4rem; justify-self: end; }
+  .project p { grid-column: 1 / -1; color: var(--dim); max-width: 68ch; text-wrap: pretty; }
+  .project p b { color: var(--ink); font-weight: 600; }
+  .project .fact { grid-column: 1 / -1; font-family: var(--mono); font-size: 0.82rem; color: var(--accent); margin-top: 0.2rem; }
+  .project .tags { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.7rem; }
+  .project .tags span {
+    font-family: var(--mono); font-size: 0.72rem; color: var(--dim);
+    border: 1px solid var(--line); border-radius: 999px; padding: 0.25rem 0.7rem;
+  }
+  @media (max-width: 640px) { .project { grid-template-columns: 1fr; } .project .plinks { justify-self: start; } }
+
+  /* toolbox marquee */
+  .marquee { overflow: hidden; white-space: nowrap; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 1.1rem 0; margin-bottom: 2.5rem; }
+  .marquee .track { display: inline-block; font-family: var(--mono); font-size: 0.9rem; color: var(--faint); will-change: transform; }
+  .marquee .track b { color: var(--dim); font-weight: 500; }
+  .skills p { margin-bottom: 0.8rem; color: var(--dim); max-width: 72ch; text-wrap: pretty; }
+  .skills b { color: var(--ink); font-weight: 640; }
+
+  /* education */
+  .edu { display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; padding: 0.9rem 0; border-top: 1px solid var(--line); }
+  .edu:first-of-type { border-top: none; }
+  .edu b { font-weight: 640; }
+  .edu .school { color: var(--faint); font-size: 0.95rem; }
+  .edu .when { font-family: var(--mono); font-size: 0.82rem; color: var(--faint); }
+
+  /* footer */
+  footer { padding: clamp(4rem, 12vh, 8rem) 0 3rem; border-top: 1px solid var(--line); text-align: center; }
+  footer .ask { font-size: clamp(1.1rem, 2.5vw, 1.3rem); color: var(--dim); }
+  .mail {
+    display: inline-block; margin-top: 1.2rem; text-decoration: none;
+    font-size: clamp(1.8rem, 6vw, 3.4rem); font-weight: 750; letter-spacing: -0.03em;
+    color: var(--ink); will-change: transform;
+  }
+  .mail em { font-style: normal; color: var(--accent); }
+  .mail:hover em { text-decoration: underline; text-decoration-thickness: 3px; text-underline-offset: 6px; }
+  footer .fine { margin-top: 3.5rem; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem; color: var(--faint); font-size: 0.9rem; }
+  footer .fine a { color: var(--dim); }
+
+  /* reveal default: VISIBLE. JS sets initial states; no CSS opacity:0 anywhere. */
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .roll > span { transition: none; }
+  }
+
+  /* ---------- print: clean paper resume ---------- */
+  @media print {
+    :root { --bg: #fff; --bg-deep: #fff; --ink: #000; --dim: #222; --faint: #555; --accent: #000; --line: #bbb; }
+    body { background: #fff; color: #000; font-size: 10pt; }
+    #graph, #progress, .scroll-hint, .marquee, .cta-row, footer .ask, .mail { display: none !important; }
+    .hero { min-height: auto; padding: 0 0 10pt; }
+    .quiet-links a::after { content: "  " attr(href); font-size: 8pt; color: #444; }
+    section.block, .proof { padding: 10pt 0; }
+    .job, .project { break-inside: avoid; }
+    * { animation: none !important; transition: none !important; opacity: 1 !important; transform: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<canvas id="graph" aria-hidden="true"></canvas>
+<div id="progress" aria-hidden="true"></div>
+
+<div class="grain">
+
+<header class="hero wrap">
+  <p class="kicker">$ npm run verify &nbsp;·&nbsp; 1377 checks passing, 0 failing</p>
+  <h1 data-reveal>Saikiran Andey builds numbers you can check.</h1>
+  <p class="tag" data-reveal><b>Data scientist.</b> Causal inference, commercial analytics, and AI products
+  that verify their own output instead of asking for trust.</p>
+  <div class="cta-row" data-reveal>
+    <a class="btn solid magnetic" href="#work">See the work</a>
+    <a class="btn magnetic" href="Saikiran_Andey_Resume.pdf" download>Download resume</a>
+  </div>
+  <div class="quiet-links" data-reveal>
+    <a class="roll" href="https://github.com/andey0Saikiran"><span data-t="GitHub">GitHub</span></a>
+    <a class="roll" href="https://linkedin.com/in/andeysaikiran"><span data-t="LinkedIn">LinkedIn</span></a>
+    <a class="roll" href="mailto:saiki.andey@gmail.com"><span data-t="saiki.andey@gmail.com">saiki.andey@gmail.com</span></a>
+  </div>
+  <div class="scroll-hint">SCROLL</div>
+</header>
+
+<section class="proof wrap" id="proof">
+  <div class="big"><span id="counter">0</span><span class="ok"> ✓</span></div>
+  <p class="cap">executed verification checks behind the causal-inference engine below.<br>
+  Every number it emits ran against hand-derived ground truth. <b>Zero failing.</b></p>
+  <span class="stamp">MACHINE-VERIFIED</span>
+  <p class="sub">Don't take the page's word for it: <a href="https://github.com/andey0Saikiran/heor-studio">run <span style="font-family:var(--mono)">npm run verify</span> yourself</a>.</p>
+</section>
+
+<section class="block wrap" aria-label="About">
+  <p class="lede" data-reveal>I lead <b>Revenue Intelligence analytics</b> for a global B2B software sales
+  organization: the metrics, measurement frameworks, and reporting a modern go-to-market org
+  runs on. Before that I spent four years in <b>healthcare real-world evidence</b>, estimating
+  treatment effects from data nobody randomized. The common thread is caring whether an
+  estimate is <b>right</b>, not just plausible.</p>
+</section>
+
+<section class="block wrap" id="work" aria-label="Projects">
+  <h2 data-reveal>Things I built, all live</h2>
+
+  <article class="project" data-reveal>
+    <h3><a href="https://github.com/andey0Saikiran/heor-studio">HEOR Studio</a></h3>
+    <div class="plinks"><a class="roll" href="https://github.com/andey0Saikiran/heor-studio"><span data-t="Source ↗">Source ↗</span></a></div>
+    <p>An open-source engine that turns observational-study protocols into SAS and SQL:
+    propensity scores, IPTW, g-computation, doubly robust estimation, competing risks.
+    The model writes a reviewable spec, deterministic emitters write the code, and every
+    emitted number is executed against ground truth derived by hand. <b>When an analysis cannot
+    be computed honestly, it refuses and says why.</b></p>
+    <div class="fact">1,377 checks passing · 0 failing · mutation-tested</div>
+    <div class="tags"><span>causal inference</span><span>TypeScript</span><span>Postgres</span><span>SAS</span><span>AGPL-3.0</span></div>
+  </article>
+
+  <article class="project" data-reveal>
+    <h3><a href="https://tableau-lineage.com">Tableau Lineage Visualizer</a></h3>
+    <div class="plinks">
+      <a class="roll" href="https://tableau-lineage.com"><span data-t="Live ↗">Live ↗</span></a>
+      <a class="roll" href="https://github.com/andey0Saikiran/tableau-lineage"><span data-t="Source ↗">Source ↗</span></a>
+    </div>
+    <p>A free lineage tool that parses Tableau workbooks <b>entirely in the browser</b> and maps
+    calculated-field dependency graphs. Nothing is uploaded. The animated graph behind this
+    page is a nod to it.</p>
+    <div class="fact">10.5K+ visitors, 45K+ requests in month one</div>
+    <div class="tags"><span>TypeScript</span><span>data viz</span><span>MCP server</span><span>Cloudflare</span></div>
+  </article>
+
+  <article class="project" data-reveal>
+    <h3><a href="https://eigen-rho.com">Eigen-Rho</a></h3>
+    <div class="plinks"><a class="roll" href="https://eigen-rho.com"><span data-t="Live ↗">Live ↗</span></a></div>
+    <p>An AI-proctored technical assessment platform. Grading runs against <b>live Postgres
+    execution</b> instead of trusting the model, with anti-cheat forensics and statistical
+    integrity signals.</p>
+    <div class="fact">machine-verified grading · live in production</div>
+    <div class="tags"><span>LLM product</span><span>Node</span><span>PGlite</span><span>proctoring</span></div>
+  </article>
+
+  <article class="project" data-reveal>
+    <h3><a href="https://github.com/andey0Saikiran/clipshuttle">ClipShuttle</a></h3>
+    <div class="plinks"><a class="roll" href="https://github.com/andey0Saikiran/clipshuttle"><span data-t="Source ↗">Source ↗</span></a></div>
+    <p>A YouTube-to-Premiere panel for a video editor's real workflow, <b>built end-to-end with
+    Claude Code</b>. Paste a link, pick a quality, the clip lands in the project.</p>
+    <div class="fact">Adobe CEP extension · shipped v1.0 · MIT</div>
+    <div class="tags"><span>JavaScript</span><span>Adobe CEP</span><span>ffmpeg</span></div>
+  </article>
+</section>
+
+<section class="block wrap" aria-label="Experience">
+  <h2 data-reveal>Where I've worked</h2>
+
+  <div class="job" data-reveal>
+    <div class="when">2025 to now</div>
+    <div>
+      <h3>Operations Research Analyst, Revenue Intelligence <span>· LatentView Analytics</span></h3>
+      <p class="where">San Francisco Bay Area · consulting engagements at Veeam Software, Adobe, and Intuit</p>
+      <ul>
+        <li>Modernized Revenue Intelligence reporting for a global sales org: legacy Salesforce to a next-generation platform, <b>15+ Tableau dashboards rebuilt with zero KPI disruption</b>.</li>
+        <li>Designed and ran <b>A/B tests</b> on App Store product-page creative, measuring download conversion by variant.</li>
+        <li>Embedded AI in the reporting layer and built Databricks pipelines processing <b>2M+ records at 99%+ reliability</b>.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="job" data-reveal>
+    <div class="when">2022 to 2023</div>
+    <div>
+      <h3>Senior Analyst, Business Analytics <span>· Chryselys</span></h3>
+      <ul>
+        <li>Patient-journey measurement framework over integrated claims data (client + IQVIA), tracing ten key encounters around each therapy administration.</li>
+        <li>Raised provider-mapping accuracy by <b>60%</b>; co-authored a paper featured at PMSA 2023.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="job" data-reveal>
+    <div class="when">2022</div>
+    <div>
+      <h3>Decision Analytics Associate Consultant <span>· ZS Associates</span></h3>
+      <ul>
+        <li>KOL targeting that contributed to a <b>15% increase in Ozempic prescriptions</b> in Q2 2022; automation saving 12 hours per associate weekly.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="job" data-reveal>
+    <div class="when">2019 to 2022</div>
+    <div>
+      <h3>Decision Scientist <span>· Mu Sigma</span></h3>
+      <ul>
+        <li>Real-World Evidence for oncology: hypothesis tests and <b>two-arm comparisons of treatment cohorts</b> supporting regulatory submissions and FDA label-extension protocols.</li>
+        <li>Survival modeling (Kaplan-Meier, Cox) on Flatiron data; <b>reproduced a randomized melanoma trial's results from observational data</b>.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="block wrap skills" aria-label="Toolbox">
+  <h2 data-reveal>Toolbox</h2>
+  <div class="marquee" aria-hidden="true"><div class="track" id="track">
+    <b>Python</b> · pandas · statsmodels · scikit-learn · <b>SQL</b> · SAS · R · <b>Tableau</b> · Power BI · Databricks · Salesforce · Postgres · <b>IPTW</b> · g-computation · AIPW · Kaplan-Meier · Cox · Fine-Gray · A/B testing · forecasting · <b>LLM apps</b> · RAG · MCP · TypeScript · Git ·&nbsp;
+  </div></div>
+  <p data-reveal><b>Causal inference and statistics:</b> experimental design, A/B testing, propensity scores,
+  IPTW, g-computation, doubly robust (AIPW) estimation, survival analysis, forecasting.</p>
+  <p data-reveal><b>Engineering:</b> Python, SQL, SAS, R, TypeScript; Tableau, Power BI, Databricks,
+  Salesforce, Postgres.</p>
+  <p data-reveal><b>AI:</b> LLM applications, retrieval-augmented generation, MCP servers,
+  machine-verified generation.</p>
+</section>
+
+<section class="block wrap" aria-label="Education">
+  <h2 data-reveal>Education</h2>
+  <div class="edu" data-reveal><div><b>MS, Business Analytics</b><div class="school">Northeastern University, Boston</div></div><span class="when">2023 to 2024</span></div>
+  <div class="edu" data-reveal><div><b>PG Diploma, Machine Learning and AI</b><div class="school">IIIT Bangalore</div></div><span class="when">2020 to 2021</span></div>
+  <div class="edu" data-reveal><div><b>BTech, Electronics and Communication</b><div class="school">GITAM University</div></div><span class="when">2014 to 2018</span></div>
+</section>
+
+<footer class="wrap">
+  <p class="ask" data-reveal>Have a hard measurement problem?</p>
+  <a class="mail magnetic" href="mailto:saiki.andey@gmail.com" data-reveal>saiki.andey@<em>gmail.com</em></a>
+  <div class="fine">
+    <span>Saikiran Andey · San Francisco Bay Area</span>
+    <span><a href="https://github.com/andey0Saikiran">GitHub</a> · <a href="https://linkedin.com/in/andeysaikiran">LinkedIn</a> · <a href="Saikiran_Andey_Resume.pdf" download>Resume PDF</a></span>
+  </div>
+</footer>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.3.4/dist/lenis.min.js" defer></script>
+<script defer>
+window.addEventListener('DOMContentLoaded', () => {
+
+  /* ---------------- lineage-graph canvas (the signature) ---------------- */
+  const cv = document.getElementById('graph');
+  const ctx = cv.getContext('2d');
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const fine = matchMedia('(pointer: fine)').matches;
+  let W, H, nodes = [], running = true, verifyT = 0;
+  const DPR = Math.min(devicePixelRatio || 1, 2);
+  const css = (v) => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+  let mouse = { x: -9999, y: -9999 };
+
+  function resize() {
+    W = innerWidth; H = innerHeight;
+    cv.width = W * DPR; cv.height = H * DPR;
+    cv.style.width = W + 'px'; cv.style.height = H + 'px';
+    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+    const target = Math.min(fine ? 90 : 48, Math.round((W * H) / 16000));
+    nodes = Array.from({ length: target }, (_, i) => ({
+      x: Math.random() * W, y: Math.random() * H,
+      vx: (Math.random() - 0.5) * 0.22, vy: (Math.random() - 0.5) * 0.22,
+      r: 1.2 + Math.random() * 1.6, i,
+    }));
+  }
+  resize();
+  addEventListener('resize', resize);
+  if (fine) addEventListener('pointermove', (e) => { mouse.x = e.clientX; mouse.y = e.clientY; }, { passive: true });
+  document.addEventListener('visibilitychange', () => { running = !document.hidden; if (running && !reduced) loop(); });
+
+  const LINK = 130, LINK2 = LINK * LINK;
+  function frame() {
+    ctx.clearRect(0, 0, W, H);
+    const inkFaint = 'oklch(0.42 0.02 274)';
+    const acc = css('--accent') || '#7c86ff';
+    const n = nodes.length;
+    for (let i = 0; i < n; i++) {
+      const a = nodes[i];
+      a.x += a.vx; a.y += a.vy;
+      if (a.x < -20) a.x = W + 20; if (a.x > W + 20) a.x = -20;
+      if (a.y < -20) a.y = H + 20; if (a.y > H + 20) a.y = -20;
+    }
+    ctx.lineWidth = 1;
+    for (let i = 0; i < n; i++) {
+      const a = nodes[i];
+      for (let j = i + 1; j < n; j++) {
+        const b = nodes[j];
+        const dx = a.x - b.x, dy = a.y - b.y, d2 = dx * dx + dy * dy;
+        if (d2 < LINK2) {
+          const alpha = 0.14 * (1 - d2 / LINK2);
+          ctx.strokeStyle = `oklch(0.6 0.05 274 / ${alpha.toFixed(3)})`;
+          ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
+        }
+      }
+      if (fine) {
+        const dx = a.x - mouse.x, dy = a.y - mouse.y, d2 = dx * dx + dy * dy;
+        if (d2 < LINK2 * 2.2) {
+          const alpha = 0.3 * (1 - d2 / (LINK2 * 2.2));
+          ctx.strokeStyle = `oklch(0.74 0.145 272 / ${alpha.toFixed(3)})`;
+          ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(mouse.x, mouse.y); ctx.stroke();
+        }
+      }
+    }
+    for (let i = 0; i < n; i++) {
+      const a = nodes[i];
+      const verified = (i / n) < verifyT;
+      ctx.fillStyle = verified ? acc : inkFaint;
+      ctx.beginPath(); ctx.arc(a.x, a.y, verified ? a.r + 0.6 : a.r, 0, 6.2832); ctx.fill();
+    }
+  }
+  function loop() { if (!running || reduced) return; frame(); requestAnimationFrame(loop); }
+  if (reduced) { frame(); } else { loop(); }
+
+  /* ---------------- GSAP choreography (page works fully without it) ---------------- */
+  if (!window.gsap) return;
+  gsap.registerPlugin(ScrollTrigger, SplitText);
+
+  /* scroll progress + node verification tied to overall progress */
+  ScrollTrigger.create({
+    start: 0, end: () => document.documentElement.scrollHeight - innerHeight,
+    onUpdate: (self) => {
+      gsap.set('#progress', { scaleX: self.progress });
+      verifyT = self.progress * 1.15;
+      if (reduced) frame();
+    },
+  });
+
+  const mm = gsap.matchMedia();
+  mm.add({ motionOK: '(prefers-reduced-motion: no-preference)', reduced: '(prefers-reduced-motion: reduce)' }, (c) => {
+    if (!c.conditions.motionOK) return;
+
+    /* smooth scroll */
+    if (window.Lenis && fine) {
+      const lenis = new Lenis();
+      lenis.on('scroll', ScrollTrigger.update);
+      gsap.ticker.add((t) => lenis.raf(t * 1000));
+      gsap.ticker.lagSmoothing(0);
+    }
+
+    /* hero: masked line reveal */
+    document.fonts.ready.then(() => {
+      SplitText.create('.hero h1', {
+        type: 'lines', mask: 'lines', autoSplit: true,
+        onSplit(self) {
+          gsap.from(self.lines, { yPercent: 110, duration: 1.0, stagger: 0.09, ease: 'power4.out', delay: 0.1 });
+        },
+      });
+      gsap.from(['.hero .kicker', '.hero .tag', '.cta-row', '.quiet-links', '.scroll-hint'], {
+        autoAlpha: 0, y: 18, duration: 0.9, stagger: 0.08, ease: 'power3.out', delay: 0.25,
+      });
+    });
+
+    /* counter set piece: scrubbed by its own scroll window */
+    const counter = { v: 0 };
+    const el = document.getElementById('counter');
+    gsap.to(counter, {
+      v: 1377, ease: 'none',
+      scrollTrigger: { trigger: '#proof', start: 'top 80%', end: 'center center', scrub: 1 },
+      onUpdate: () => { el.textContent = Math.round(counter.v).toLocaleString(); },
+    });
+    gsap.from('.proof .stamp', {
+      scale: 2.2, autoAlpha: 0, ease: 'power3.out', duration: 0.5,
+      scrollTrigger: { trigger: '#proof', start: 'center 60%', toggleActions: 'play none none reverse' },
+    });
+
+    /* section reveals */
+    document.querySelectorAll('[data-reveal]').forEach((elm) => {
+      if (elm.closest('.hero')) return;
+      gsap.from(elm, {
+        autoAlpha: 0, y: 26, duration: 0.85, ease: 'power3.out',
+        scrollTrigger: { trigger: elm, start: 'top 88%', toggleActions: 'play none none none' },
+      });
+    });
+
+    /* marquee */
+    const track = document.getElementById('track');
+    track.parentElement.appendChild(track.cloneNode(true));
+    gsap.to('.marquee .track', { xPercent: -100, ease: 'none', duration: 28, repeat: -1 });
+
+    /* magnetic buttons (pointer fine only) */
+    if (fine) {
+      document.querySelectorAll('.magnetic').forEach((btn) => {
+        const xTo = gsap.quickTo(btn, 'x', { duration: 0.4, ease: 'power3' });
+        const yTo = gsap.quickTo(btn, 'y', { duration: 0.4, ease: 'power3' });
+        let rect;
+        btn.addEventListener('pointerenter', () => { rect = btn.getBoundingClientRect(); });
+        btn.addEventListener('pointermove', (e) => {
+          if (!rect) rect = btn.getBoundingClientRect();
+          xTo((e.clientX - rect.left - rect.width / 2) * 0.28);
+          yTo((e.clientY - rect.top - rect.height / 2) * 0.28);
+        });
+        btn.addEventListener('pointerleave', () => { xTo(0); yTo(0); rect = null; });
+      });
+    }
+    return () => {};
+  });
+
+  /* reduced motion: counter shows final value instantly */
+  if (reduced) { document.getElementById('counter').textContent = '1,377'; verifyT = 1; frame(); }
+});
+</script>
+</body>
+</html>

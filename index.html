@@ -38,6 +38,17 @@
   #graph { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
   .grain { position: relative; z-index: 1; }
 
+  /* cursor spotlight (pointer-fine only; JS activates) */
+  #spot {
+    position: fixed; left: 0; top: 0; width: 620px; height: 620px; border-radius: 50%;
+    background: radial-gradient(circle at center,
+      oklch(0.74 0.145 272 / 0.13),
+      oklch(0.74 0.145 272 / 0.045) 42%,
+      transparent 72%);
+    pointer-events: none; z-index: 0; opacity: 0;
+    will-change: transform, opacity;
+  }
+
   /* scroll progress */
   #progress {
     position: fixed; top: 0; left: 0; height: 2px; width: 100%;
@@ -216,7 +227,7 @@
   @media print {
     :root { --bg: #fff; --bg-deep: #fff; --ink: #000; --dim: #222; --faint: #555; --accent: #000; --line: #bbb; }
     body { background: #fff; color: #000; font-size: 10pt; }
-    #graph, #progress, .scroll-hint, .marquee, .cta-row, footer .ask, .mail, .logo-chip, .mini-chip { display: none !important; }\n    .jobs::before, .job::before { display: none !important; }\n    .job { padding-left: 0; }
+    #graph, #progress, .scroll-hint, .marquee, .cta-row, footer .ask, .mail, .logo-chip, .mini-chip, #spot { display: none !important; }\n    .jobs::before, .job::before { display: none !important; }\n    .job { padding-left: 0; }
     .hero { min-height: auto; padding: 0 0 10pt; }
     .quiet-links a::after { content: "  " attr(href); font-size: 8pt; color: #444; }
     section.block, .proof { padding: 10pt 0; }
@@ -228,6 +239,7 @@
 <body>
 
 <canvas id="graph" aria-hidden="true"></canvas>
+<div id="spot" aria-hidden="true"></div>
 <div id="progress" aria-hidden="true"></div>
 
 <div class="grain">
@@ -512,11 +524,17 @@ window.addEventListener('DOMContentLoaded', () => {
         }
       }
     }
+    const SPOT = 170, SPOT2 = SPOT * SPOT;
     for (let i = 0; i < n; i++) {
       const a = nodes[i];
       const verified = (i / n) < verifyT;
-      ctx.fillStyle = verified ? acc : inkFaint;
-      ctx.beginPath(); ctx.arc(a.x, a.y, verified ? a.r + 0.6 : a.r, 0, 6.2832); ctx.fill();
+      let r = verified ? a.r + 0.6 : a.r, lit = verified;
+      if (fine) {
+        const dx = a.x - mouse.x, dy = a.y - mouse.y, d2 = dx * dx + dy * dy;
+        if (d2 < SPOT2) { const t = 1 - d2 / SPOT2; r += 1.6 * t; if (t > 0.25) lit = true; }
+      }
+      ctx.fillStyle = lit ? acc : inkFaint;
+      ctx.beginPath(); ctx.arc(a.x, a.y, r, 0, 6.2832); ctx.fill();
     }
   }
   function loop() { if (!running || reduced) return; frame(); requestAnimationFrame(loop); }
@@ -587,6 +605,20 @@ window.addEventListener('DOMContentLoaded', () => {
     const track = document.getElementById('track');
     track.parentElement.appendChild(track.cloneNode(true));
     gsap.to('.marquee .track', { xPercent: -100, ease: 'none', duration: 34, repeat: -1 });
+
+    /* cursor spotlight: highlights where you look */
+    if (fine) {
+      const spot = document.getElementById('spot');
+      gsap.set(spot, { xPercent: -50, yPercent: -50 });
+      const spx = gsap.quickTo(spot, 'x', { duration: 0.55, ease: 'power3' });
+      const spy = gsap.quickTo(spot, 'y', { duration: 0.55, ease: 'power3' });
+      let spotOn = false;
+      addEventListener('pointermove', (e) => {
+        spx(e.clientX); spy(e.clientY);
+        if (!spotOn) { spotOn = true; gsap.to(spot, { opacity: 1, duration: 0.5 }); }
+      }, { passive: true });
+      document.documentElement.addEventListener('mouseleave', () => { spotOn = false; gsap.to(spot, { opacity: 0, duration: 0.5 }); });
+    }
 
     /* magnetic buttons (pointer fine only) */
     if (fine) {

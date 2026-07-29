@@ -143,6 +143,14 @@
   .job ul { margin: 0.9rem 0 0 1.1rem; color: var(--dim); }
   .job li { margin-bottom: 0.45rem; text-wrap: pretty; }
   .job li b { color: var(--ink); font-weight: 600; }
+  .client { margin-top: 1.15rem; }
+  .client-head { display: flex; align-items: center; gap: 0.65rem; flex-wrap: wrap; }
+  .mini-chip { background: #fff; border-radius: 7px; padding: 0.28rem 0.55rem; height: 30px; display: inline-flex; align-items: center; flex: none; }
+  .mini-chip img { height: 100%; width: auto; max-width: 82px; object-fit: contain; display: block; }
+  .client-head b { font-weight: 640; font-size: 0.98rem; }
+  .client-head .cdates { font-family: var(--mono); font-size: 0.75rem; color: var(--faint); margin-left: auto; }
+  .client ul { margin-top: 0.45rem; }
+  @media (max-width: 640px) { .client-head .cdates { margin-left: 0; width: 100%; } }
   @media (max-width: 640px) { .job { padding-left: 1.6rem; } .job .when { margin-left: 0; width: 100%; } }
 
   /* projects */
@@ -208,7 +216,7 @@
   @media print {
     :root { --bg: #fff; --bg-deep: #fff; --ink: #000; --dim: #222; --faint: #555; --accent: #000; --line: #bbb; }
     body { background: #fff; color: #000; font-size: 10pt; }
-    #graph, #progress, .scroll-hint, .marquee, .cta-row, footer .ask, .mail, .logo-chip { display: none !important; }\n    .jobs::before, .job::before { display: none !important; }\n    .job { padding-left: 0; }
+    #graph, #progress, .scroll-hint, .marquee, .cta-row, footer .ask, .mail, .logo-chip, .mini-chip { display: none !important; }\n    .jobs::before, .job::before { display: none !important; }\n    .job { padding-left: 0; }
     .hero { min-height: auto; padding: 0 0 10pt; }
     .quiet-links a::after { content: "  " attr(href); font-size: 8pt; color: #444; }
     section.block, .proof { padding: 10pt 0; }
@@ -317,16 +325,32 @@
       <span class="logo-chip"><img src="logos/latentview.svg" alt="LatentView Analytics logo"></span>
       <div class="head-main">
         <h3>Operations Research Analyst, Revenue Intelligence</h3>
-        <p class="where">LatentView Analytics · San Francisco Bay Area · engagements at Veeam Software, Adobe, and Intuit</p>
+        <p class="where">LatentView Analytics · San Francisco Bay Area · embedded with three enterprise clients</p>
       </div>
       <span class="when">2025 to now</span>
     </div>
     <div>
-      <ul>
-        <li>Modernized Revenue Intelligence reporting for a global sales org: legacy Salesforce to a next-generation platform, <b>15+ Tableau dashboards rebuilt with zero KPI disruption</b>.</li>
-        <li>Designed and ran <b>A/B tests</b> on App Store product-page creative, measuring download conversion by variant.</li>
-        <li>Embedded AI in the reporting layer and built Databricks pipelines processing <b>2M+ records at 99%+ reliability</b>.</li>
-      </ul>
+      <div class="client">
+        <div class="client-head"><span class="mini-chip"><img src="logos/veeam.png" alt="Veeam logo"></span><b>Veeam Software · Revenue Intelligence</b><span class="cdates">Feb 2026 to now</span></div>
+        <ul>
+          <li>Modernized reporting for the global sales org: legacy Salesforce to a next-generation platform, <b>15+ Tableau dashboards rebuilt with zero KPI disruption</b> through the cutover.</li>
+          <li>Embedded AI in the reporting layer (natural-language querying, insight summaries, anomaly detection); Databricks pipelines processing <b>2M+ records at 99%+ reliability</b>.</li>
+        </ul>
+      </div>
+      <div class="client">
+        <div class="client-head"><span class="mini-chip"><img src="logos/adobe.png" alt="Adobe logo"></span><b>Adobe · Mobile Analytics</b><span class="cdates">Sep 2025 to Feb 2026</span></div>
+        <ul>
+          <li>Designed and ran <b>A/B tests on App Store product-page creative</b>, measuring download conversion by screenshot variant to drive creative selection.</li>
+          <li>Architected a <b>RAG system over 10K+ weekly call transcripts</b>, cutting meeting prep by ~8 hours a week.</li>
+        </ul>
+      </div>
+      <div class="client">
+        <div class="client-head"><span class="mini-chip"><img src="logos/intuit.png" alt="Intuit logo"></span><b>Intuit · Sales &amp; Inventory Analytics</b><span class="cdates">May 2025 to Sep 2025</span></div>
+        <ul>
+          <li>Automated real-time sales and inventory pipelines in Python with dynamic model retraining feeding live dashboards.</li>
+          <li>Entity-resolution pipelines across 1M+ records, <b>improving matching accuracy by 30%</b>.</li>
+        </ul>
+      </div>
     </div>
   </div>
 
@@ -400,6 +424,13 @@
   <div class="edu" data-reveal><div><b>MS, Business Analytics</b><div class="school">Northeastern University, Boston</div></div><span class="when">2023 to 2024</span></div>
   <div class="edu" data-reveal><div><b>PG Diploma, Machine Learning and AI</b><div class="school">IIIT Bangalore</div></div><span class="when">2020 to 2021</span></div>
   <div class="edu" data-reveal><div><b>BTech, Electronics and Communication</b><div class="school">GITAM University</div></div><span class="when">2014 to 2018</span></div>
+</section>
+
+<section class="block wrap" aria-label="Recognition">
+  <h2 data-reveal>Recognition</h2>
+  <div class="edu" data-reveal><div><b>Published: Mapping Radioligand Therapy Referrals in Prostate Cancer</b><div class="school">Co-author · featured at the PMSA Annual Conference 2023</div></div><span class="when">2023</span></div>
+  <div class="edu" data-reveal><div><b>Spot Award and Impact Award</b><div class="school">Mu Sigma, for automation that saved 1+ workday per project</div></div><span class="when">2021</span></div>
+  <div class="edu" data-reveal><div><b>Certifications</b><div class="school">Prompt Engineering for Generative AI · Python: Predictive Analytics · Deep Learning · Python Data Analysis for Healthcare</div></div></div>
 </section>
 
 <footer class="wrap">

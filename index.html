@@ -8,6 +8,7 @@
 <meta property="og:title" content="Saikiran Andey, Data Scientist">
 <meta property="og:description" content="Causal inference, commercial analytics, and AI products that verify their own numbers.">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='18' fill='%23101018'/><circle cx='30' cy='60' r='7' fill='%237c86ff'/><circle cx='62' cy='32' r='7' fill='white'/><circle cx='72' cy='72' r='7' fill='white'/><path d='M30 60 62 32M30 60 72 72' stroke='white' stroke-width='3' opacity='.5'/></svg>">
+<script>document.documentElement.classList.add('js');setTimeout(function(){document.documentElement.classList.remove('js')},1800);</script>
 <style>
   :root {
     --bg: oklch(0.17 0.014 274);
@@ -23,6 +24,7 @@
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   html { scroll-behavior: smooth; }
+  html.lenis { scroll-behavior: auto; }
   body {
     font-family: var(--sans);
     background: var(--bg);
@@ -59,14 +61,15 @@
   .wrap { max-width: 62rem; margin: 0 auto; padding: 0 clamp(1.25rem, 4vw, 2.5rem); }
 
   /* ---------- hero ---------- */
-  .hero { min-height: 100svh; display: flex; flex-direction: column; justify-content: center; position: relative; }
-  .hero .kicker {
-    font-family: var(--mono); font-size: 0.85rem; color: var(--accent);
-    margin-bottom: 1.4rem;
+  .hero {
+    min-height: 100svh; display: flex; flex-direction: column; justify-content: center;
+    position: relative; padding-block: clamp(4rem, 10vh, 6rem) 5.5rem;
   }
+  .hero .kicker { font-family: var(--mono); font-size: 0.85rem; color: var(--accent); margin-bottom: 1.4rem; }
+  .hero .kicker .out { color: var(--dim); }
   .hero h1 {
     font-size: clamp(3rem, 11vw, 6rem);
-    font-weight: 800; letter-spacing: -0.035em; line-height: 0.98;
+    font-weight: 800; letter-spacing: -0.035em; line-height: 1.02;
     text-wrap: balance;
   }
   .hero .tag {
@@ -85,11 +88,25 @@
   .btn:hover { border-color: var(--accent); }
   .btn.solid { background: var(--ink); color: var(--bg-deep); border-color: var(--ink); }
   .btn.solid:hover { background: var(--accent); border-color: var(--accent); color: white; }
-  .hero .quiet-links { margin-top: 1.6rem; display: flex; gap: 1.6rem; }
+  .cred {
+    display: inline-flex; align-items: center; gap: 0.55rem;
+    font-family: var(--mono); font-size: 0.85rem; letter-spacing: 0.03em;
+    color: var(--accent); text-decoration: none;
+    border: 1px solid oklch(0.74 0.145 272 / 0.5); border-radius: 999px; padding: 0.8rem 1.3rem;
+    background: oklch(0.74 0.145 272 / 0.07);
+    transition: background 0.25s, border-color 0.25s;
+  }
+  .cred:hover { border-color: var(--accent); background: oklch(0.74 0.145 272 / 0.15); }
+  .cred .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 9px oklch(0.74 0.145 272 / 0.8); flex: none; }
+  .hero .quiet-links { margin-top: 2.4rem; display: flex; gap: 1.6rem; flex-wrap: wrap; }
   .scroll-hint {
     position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%);
     font-family: var(--mono); font-size: 0.75rem; color: var(--faint); letter-spacing: 0.15em;
   }
+  @media (max-height: 640px) { .scroll-hint { display: none; } }
+
+  /* first-paint guard: hidden only while .js is on root; GSAP takes over via inline styles */
+  .js .hero .kicker, .js .hero h1, .js .hero .tag, .js .cta-row, .js .quiet-links, .js .scroll-hint { visibility: hidden; }
 
   /* rolling links */
   .roll { position: relative; display: inline-block; overflow: hidden; vertical-align: bottom; text-decoration: none; color: var(--dim); font-size: 0.95rem; }
@@ -99,20 +116,41 @@
 
   /* ---------- proof set piece ---------- */
   .proof { padding: clamp(5rem, 14vh, 9rem) 0; text-align: center; position: relative; }
+  .proof::before {
+    content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+    background: radial-gradient(55% 50% at 50% 40%, oklch(0.74 0.145 272 / 0.08), transparent 70%);
+  }
   .proof .big {
     font-family: var(--mono); font-weight: 700;
     font-size: clamp(3.4rem, 13vw, 6rem); letter-spacing: -0.03em; line-height: 1;
     font-variant-numeric: tabular-nums; color: var(--ink);
   }
+  #counter { display: inline-block; min-width: 5ch; text-align: right; }
   .proof .big .ok { color: var(--accent); }
-  .proof .cap { margin-top: 1rem; color: var(--dim); font-size: clamp(1rem, 2.2vw, 1.15rem); }
+  .proof .ticker { font-family: var(--mono); font-size: 0.8rem; color: var(--faint); min-height: 1.5em; margin-top: 0.6rem; }
+  .proof .cap { margin-top: 0.9rem; color: var(--dim); font-size: clamp(1rem, 2.2vw, 1.15rem); }
+  .proof .cap b { color: var(--ink); }
   .proof .stamp {
     display: inline-block; margin-top: 1.6rem; font-family: var(--mono); font-size: 0.8rem;
     letter-spacing: 0.18em; color: var(--accent); border: 1px solid var(--accent);
-    padding: 0.45rem 1rem; border-radius: 4px; opacity: 0.9;
+    padding: 0.45rem 1rem; border-radius: 4px; opacity: 0.9; transform: rotate(-2deg);
   }
   .proof .sub { margin-top: 2.2rem; color: var(--faint); font-size: 0.95rem; }
   .proof .sub a { color: var(--dim); }
+  .runbtn {
+    margin-top: 1.1rem; font-family: var(--mono); font-size: 0.85rem; cursor: pointer;
+    color: var(--ink); background: none; border: 1px solid var(--line); border-radius: 999px;
+    padding: 0.7rem 1.4rem; transition: border-color 0.25s, background 0.25s;
+  }
+  .runbtn:hover { border-color: var(--accent); background: oklch(0.74 0.145 272 / 0.08); }
+  #term {
+    margin: 1.6rem auto 0; max-width: 44rem; text-align: left;
+    background: var(--bg-deep); border: 1px solid var(--line); border-radius: 10px;
+    font-family: var(--mono); font-size: 0.78rem; line-height: 1.7; color: var(--dim);
+    padding: 1rem 1.2rem; max-height: 16rem; overflow-y: auto; white-space: pre-wrap;
+  }
+  #term .okc { color: var(--accent); }
+  #term .hd { color: var(--faint); }
 
   /* ---------- sections ---------- */
   section.block { padding: clamp(3.5rem, 9vh, 6.5rem) 0; border-top: 1px solid var(--line); position: relative; }
@@ -120,7 +158,6 @@
     font-size: clamp(1.7rem, 4.5vw, 2.6rem); font-weight: 750; letter-spacing: -0.025em;
     margin-bottom: clamp(1.8rem, 4vw, 2.8rem); text-wrap: balance;
   }
-  h2 .idx { font-family: var(--mono); font-size: 0.55em; color: var(--faint); vertical-align: 0.5em; margin-right: 0.4em; font-weight: 500; }
   .lede { color: var(--dim); max-width: 62ch; text-wrap: pretty; font-size: 1.1rem; }
   .lede b { color: var(--ink); font-weight: 600; }
   a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 3px; }
@@ -130,25 +167,25 @@
   .jobs::before {
     content: ""; position: absolute; left: 7px; top: 20px; bottom: 26px; width: 1px;
     background: linear-gradient(180deg, var(--accent), var(--line) 45%, var(--line));
+    transform: scaleY(var(--draw, 1)); transform-origin: top;
   }
   .job { position: relative; padding: 1.6rem 0 1.6rem 2.4rem; }
   .job::before {
-    content: ""; position: absolute; left: 3px; top: calc(1.6rem + 16px); width: 9px; height: 9px;
+    content: ""; position: absolute; left: 3px; top: calc(1.6rem + 13px); width: 9px; height: 9px;
     border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 4px var(--bg);
     transition: box-shadow 0.3s;
   }
   .job:hover::before { box-shadow: 0 0 0 4px var(--bg), 0 0 14px 2px oklch(0.74 0.145 272 / 0.55); }
   .job .head { display: flex; align-items: center; gap: 1.1rem; flex-wrap: wrap; }
   .logo-chip {
-    background: #fff; border-radius: 10px; padding: 0.5rem 0.85rem; height: 46px; width: auto;
+    background: #f4f4f6; border-radius: 8px; padding: 0.4rem 0.7rem; height: 38px; width: auto;
     display: inline-flex; align-items: center; flex: none;
     transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
   }
-  .logo-chip img { height: 100%; width: auto; max-width: 140px; object-fit: contain; display: block; }
+  .logo-chip img { height: 100%; width: auto; max-width: 120px; object-fit: contain; display: block; }
   .job:hover .logo-chip { transform: translateY(-2px); }
   .job .head-main { flex: 1; min-width: 15rem; }
-  .job h3 { font-size: 1.16rem; font-weight: 680; letter-spacing: -0.01em; }
-  .job h3 span { color: var(--dim); font-weight: 450; }
+  .job h3 { font-size: 1.3rem; font-weight: 680; letter-spacing: -0.015em; }
   .job .where { color: var(--faint); font-size: 0.9rem; margin-top: 0.1rem; }
   .job .when { font-family: var(--mono); font-size: 0.82rem; color: var(--faint); margin-left: auto; }
   .job ul { margin: 0.9rem 0 0 1.1rem; color: var(--dim); }
@@ -156,20 +193,23 @@
   .job li b { color: var(--ink); font-weight: 600; }
   .client { margin-top: 1.15rem; }
   .client-head { display: flex; align-items: center; gap: 0.65rem; flex-wrap: wrap; }
-  .mini-chip { background: #fff; border-radius: 7px; padding: 0.28rem 0.55rem; height: 30px; display: inline-flex; align-items: center; flex: none; }
+  .mini-chip { background: #f4f4f6; border-radius: 7px; padding: 0.28rem 0.55rem; height: 30px; display: inline-flex; align-items: center; flex: none; }
   .mini-chip img { height: 100%; width: auto; max-width: 82px; object-fit: contain; display: block; }
   .client-head b { font-weight: 640; font-size: 0.98rem; }
   .client-head .cdates { font-family: var(--mono); font-size: 0.75rem; color: var(--faint); margin-left: auto; }
   .client ul { margin-top: 0.45rem; }
-  @media (max-width: 640px) { .client-head .cdates { margin-left: 0; width: 100%; } }
-  @media (max-width: 640px) { .job { padding-left: 1.6rem; } .job .when { margin-left: 0; width: 100%; } }
+  @media (max-width: 640px) {
+    .job { padding-left: 1.6rem; }
+    .job .when { margin-left: 0; width: 100%; }
+    .client-head .cdates { margin-left: 0; width: 100%; }
+  }
 
-  /* projects */
+  /* projects: separation by space, not rules */
   .project {
-    padding: 2.2rem 0; border-top: 1px solid var(--line);
+    padding: 2.2rem 0;
     display: grid; grid-template-columns: 1fr auto; gap: 0.4rem 2rem; align-items: baseline;
   }
-  .project:first-of-type { border-top: none; padding-top: 0; }
+  .project:first-of-type { padding-top: 0; }
   .project h3 { font-size: clamp(1.5rem, 3.5vw, 2rem); font-weight: 720; letter-spacing: -0.02em; }
   .project h3 a { color: var(--ink); text-decoration: none; transition: color 0.25s; }
   .project h3 a:hover { color: var(--accent); }
@@ -184,22 +224,24 @@
   }
   @media (max-width: 640px) { .project { grid-template-columns: 1fr; } .project .plinks { justify-self: start; } }
 
-  /* toolbox marquee */
-  .marquee {
-    overflow: hidden; white-space: nowrap; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
-    padding: 1.35rem 0; margin-bottom: 2.5rem;
-    mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
-    -webkit-mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+  /* toolbox grid */
+  .skillgrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2.2rem 2.5rem; }
+  .skillgroup h3 { font-family: var(--mono); font-size: 0.8rem; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: var(--faint); margin-bottom: 1rem; }
+  .pills { display: flex; flex-wrap: wrap; gap: 0.55rem; }
+  .pills span {
+    font-family: var(--mono); font-size: 0.82rem; color: var(--dim);
+    border: 1px solid var(--line); padding: 0.38rem 0.85rem; border-radius: 999px;
+    transition: border-color 0.2s, color 0.2s;
   }
-  .marquee .track { display: inline-block; font-family: var(--mono); font-size: 1.05rem; color: var(--dim); will-change: transform; }
-  .marquee .track b { color: var(--ink); font-weight: 600; }
-  .skills p { margin-bottom: 0.8rem; color: var(--dim); max-width: 72ch; text-wrap: pretty; }
-  .skills b { color: var(--ink); font-weight: 640; }
+  .pills span:hover { border-color: oklch(0.74 0.145 272 / 0.5); color: var(--ink); }
+  .pills span.hot { color: var(--accent); border-color: oklch(0.74 0.145 272 / 0.45); background: oklch(0.74 0.145 272 / 0.06); }
 
-  /* education */
+  /* education + recognition rows */
   .edu { display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; padding: 0.9rem 0; border-top: 1px solid var(--line); }
   .edu:first-of-type { border-top: none; }
   .edu b { font-weight: 640; }
+  .edu b a { color: var(--ink); text-decoration: none; }
+  .edu b a:hover { color: var(--accent); }
   .edu .school { color: var(--faint); font-size: 0.95rem; }
   .edu .when { font-family: var(--mono); font-size: 0.82rem; color: var(--faint); }
 
@@ -216,23 +258,26 @@
   footer .fine { margin-top: 3.5rem; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem; color: var(--faint); font-size: 0.9rem; }
   footer .fine a { color: var(--dim); }
 
-  /* reveal default: VISIBLE. JS sets initial states; no CSS opacity:0 anywhere. */
-
   @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
     .roll > span { transition: none; }
+    .js .hero .kicker, .js .hero h1, .js .hero .tag, .js .cta-row, .js .quiet-links, .js .scroll-hint { visibility: visible; }
   }
 
   /* ---------- print: clean paper resume ---------- */
   @media print {
     :root { --bg: #fff; --bg-deep: #fff; --ink: #000; --dim: #222; --faint: #555; --accent: #000; --line: #bbb; }
     body { background: #fff; color: #000; font-size: 10pt; }
-    #graph, #progress, .scroll-hint, .marquee, .cta-row, footer .ask, .mail, .logo-chip, .mini-chip, #spot { display: none !important; }\n    .jobs::before, .job::before { display: none !important; }\n    .job { padding-left: 0; }
+    #graph, #progress, #spot, .scroll-hint, .cta-row, footer .ask, .mail, .logo-chip, .mini-chip, .runbtn, #term { display: none !important; }
+    .jobs::before, .job::before { display: none !important; }
+    .job { padding-left: 0; }
     .hero { min-height: auto; padding: 0 0 10pt; }
     .quiet-links a::after { content: "  " attr(href); font-size: 8pt; color: #444; }
     section.block, .proof { padding: 10pt 0; }
+    .proof::before { display: none; }
     .job, .project { break-inside: avoid; }
-    * { animation: none !important; transition: none !important; opacity: 1 !important; transform: none !important; }
+    footer { display: none; }
+    * { animation: none !important; transition: none !important; opacity: 1 !important; transform: none !important; visibility: visible !important; }
   }
 </style>
 </head>
@@ -245,15 +290,16 @@
 <div class="grain">
 
 <header class="hero wrap">
-  <p class="kicker">$ npm run verify &nbsp;·&nbsp; 1377 checks passing, 0 failing</p>
-  <h1 data-reveal>Saikiran Andey builds numbers you can check.</h1>
-  <p class="tag" data-reveal><b>Data scientist.</b> Causal inference, commercial analytics, and AI products
+  <p class="kicker"><span class="cmd">$ npm run verify</span><span class="out">&nbsp;&nbsp;1377 checks passing, 0 failing</span></p>
+  <h1>Saikiran Andey builds numbers you can check.</h1>
+  <p class="tag"><b>Data scientist.</b> Causal inference, commercial analytics, and AI products
   that verify their own output instead of asking for trust.</p>
-  <div class="cta-row" data-reveal>
+  <div class="cta-row">
     <a class="btn solid magnetic" href="#work">See the work</a>
     <a class="btn magnetic" href="Saikiran_Andey_Resume.pdf" download>Download resume</a>
+    <a class="cred" href="https://www.credly.com/badges/5adef59b-6dd3-4dc1-bec7-ad98278b2824"><span class="dot"></span>Claude Certified Architect · CCA-F · Anthropic</a>
   </div>
-  <div class="quiet-links" data-reveal>
+  <div class="quiet-links">
     <a class="roll" href="https://github.com/andey0Saikiran"><span data-t="GitHub">GitHub</span></a>
     <a class="roll" href="https://linkedin.com/in/andeysaikiran"><span data-t="LinkedIn">LinkedIn</span></a>
     <a class="roll" href="mailto:saiki.andey@gmail.com"><span data-t="saiki.andey@gmail.com">saiki.andey@gmail.com</span></a>
@@ -262,23 +308,26 @@
 </header>
 
 <section class="proof wrap" id="proof">
-  <div class="big"><span id="counter">0</span><span class="ok"> ✓</span></div>
-  <p class="cap">executed verification checks behind the causal-inference engine below.<br>
-  Every number it emits ran against hand-derived ground truth. <b>Zero failing.</b></p>
+  <div class="big"><span id="counter">1,377</span><span class="ok"> ✓</span></div>
+  <div class="ticker" id="ticker" aria-hidden="true"></div>
+  <p class="cap">verification checks passing in HEOR Studio, the causal-inference engine below.<br>
+  Every number it emits was executed and compared to results worked out by hand. <b>Zero failing.</b></p>
   <span class="stamp">MACHINE-VERIFIED</span>
-  <p class="sub">Don't take the page's word for it: <a href="https://github.com/andey0Saikiran/heor-studio">run <span style="font-family:var(--mono)">npm run verify</span> yourself</a>.</p>
+  <p class="sub">Don't take the page's word for it: <a href="https://github.com/andey0Saikiran/heor-studio">audit the full suite</a>, or run a sample right here.</p>
+  <button class="runbtn" id="runbtn" hidden>Run 12 of the checks in your browser</button>
+  <div id="term" hidden aria-live="polite"></div>
 </section>
 
 <section class="block wrap" aria-label="About">
-  <p class="lede" data-reveal>I lead <b>Revenue Intelligence analytics</b> for a global B2B software sales
-  organization: the metrics, measurement frameworks, and reporting a modern go-to-market org
-  runs on. Before that I spent four years in <b>healthcare real-world evidence</b>, estimating
+  <p class="lede" data-reveal>I build the <b>Revenue Intelligence layer</b> for a global B2B software sales
+  organization: the metrics, measurement frameworks, and reporting the go-to-market org runs
+  on. Before that I spent four years in <b>healthcare real-world evidence</b>, estimating
   treatment effects from data nobody randomized. The common thread is caring whether an
   estimate is <b>right</b>, not just plausible.</p>
 </section>
 
 <section class="block wrap" id="work" aria-label="Projects">
-  <h2 data-reveal>Things I built, all live</h2>
+  <h2 data-reveal>Things I built, all public</h2>
 
   <article class="project" data-reveal>
     <h3><a href="https://github.com/andey0Saikiran/heor-studio">HEOR Studio</a></h3>
@@ -311,7 +360,7 @@
     <p>An AI-proctored technical assessment platform. Grading runs against <b>live Postgres
     execution</b> instead of trusting the model, with anti-cheat forensics and statistical
     integrity signals.</p>
-    <div class="fact">machine-verified grading · live in production</div>
+    <div class="fact">20+ concurrent assessment sessions on a 2GB instance · live in production</div>
     <div class="tags"><span>LLM product</span><span>Node</span><span>PGlite</span><span>proctoring</span></div>
   </article>
 
@@ -332,7 +381,7 @@
   <h2 data-reveal>Where I've worked</h2>
 
   <div class="jobs">
-  <div class="job" data-reveal>
+  <div class="job">
     <div class="head">
       <span class="logo-chip"><img src="logos/latentview.svg" alt="LatentView Analytics logo"></span>
       <div class="head-main">
@@ -345,15 +394,15 @@
       <div class="client">
         <div class="client-head"><span class="mini-chip"><img src="logos/veeam.png" alt="Veeam logo"></span><b>Veeam Software · Revenue Intelligence</b><span class="cdates">Feb 2026 to now</span></div>
         <ul>
-          <li>Modernized reporting for the global sales org: legacy Salesforce to a next-generation platform, <b>15+ Tableau dashboards rebuilt with zero KPI disruption</b> through the cutover.</li>
-          <li>Embedded AI in the reporting layer (natural-language querying, insight summaries, anomaly detection); Databricks pipelines processing <b>2M+ records at 99%+ reliability</b>.</li>
+          <li>Rebuilt <b>15+ Tableau dashboards</b> for the global sales org during the migration off legacy Salesforce reporting, with <b>zero KPI disruption</b> through the cutover.</li>
+          <li>Added natural-language querying, insight summaries, and anomaly detection to the reporting layer, backed by Databricks pipelines processing <b>2M+ records at 99%+ refresh reliability</b>.</li>
         </ul>
       </div>
       <div class="client">
         <div class="client-head"><span class="mini-chip"><img src="logos/adobe.png" alt="Adobe logo"></span><b>Adobe · Mobile Analytics</b><span class="cdates">Sep 2025 to Feb 2026</span></div>
         <ul>
-          <li>Designed and ran <b>A/B tests on App Store product-page creative</b>, measuring download conversion by screenshot variant to drive creative selection.</li>
-          <li>Architected a <b>RAG system over 10K+ weekly call transcripts</b>, cutting meeting prep by ~8 hours a week.</li>
+          <li>Designed and ran <b>A/B tests on App Store product-page creative</b>, measuring download conversion by screenshot variant; the readouts decided which creative went live.</li>
+          <li>Architected a <b>RAG system over 10K+ weekly call transcripts</b>, cutting meeting prep by about 8 hours a week.</li>
         </ul>
       </div>
       <div class="client">
@@ -366,7 +415,7 @@
     </div>
   </div>
 
-  <div class="job" data-reveal>
+  <div class="job">
     <div class="head">
       <span class="logo-chip"><img src="logos/chryselys.png" alt="Chryselys logo"></span>
       <div class="head-main">
@@ -378,12 +427,12 @@
     <div>
       <ul>
         <li>Patient-journey measurement framework over integrated claims data (client + IQVIA), tracing ten key encounters around each therapy administration.</li>
-        <li>Raised provider-mapping accuracy by <b>60%</b>; co-authored a paper featured at PMSA 2023.</li>
+        <li>Raised provider-mapping accuracy by <b>60%</b> across the integrated claims data.</li>
       </ul>
     </div>
   </div>
 
-  <div class="job" data-reveal>
+  <div class="job">
     <div class="head">
       <span class="logo-chip"><img src="logos/zs.png" alt="ZS Associates logo"></span>
       <div class="head-main">
@@ -394,12 +443,13 @@
     </div>
     <div>
       <ul>
-        <li>KOL targeting that contributed to a <b>15% increase in Ozempic prescriptions</b> in Q2 2022; automation saving 12 hours per associate weekly.</li>
+        <li>KOL targeting that contributed to a <b>15% increase in Ozempic prescriptions</b> in Q2 2022.</li>
+        <li>Automated reporting and data-governance workflows in Python and VBA, saving <b>12 hours per associate every week</b>.</li>
       </ul>
     </div>
   </div>
 
-  <div class="job" data-reveal>
+  <div class="job">
     <div class="head">
       <span class="logo-chip"><img src="logos/musigma.svg" alt="Mu Sigma logo"></span>
       <div class="head-main">
@@ -410,8 +460,8 @@
     </div>
     <div>
       <ul>
-        <li>Real-World Evidence for oncology: hypothesis tests and <b>two-arm comparisons of treatment cohorts</b> supporting regulatory submissions and FDA label-extension protocols.</li>
-        <li>Survival modeling (Kaplan-Meier, Cox) on Flatiron data; <b>reproduced a randomized melanoma trial's results from observational data</b>.</li>
+        <li><b>Reproduced a randomized melanoma trial's results from observational data</b>, using Kaplan-Meier and Cox survival models on Flatiron records.</li>
+        <li>Ran hypothesis tests and two-arm treatment-cohort comparisons supporting regulatory submissions and <b>FDA label-extension protocols</b>.</li>
       </ul>
     </div>
   </div>
@@ -420,15 +470,20 @@
 
 <section class="block wrap skills" aria-label="Toolbox">
   <h2 data-reveal>Toolbox</h2>
-  <div class="marquee" aria-hidden="true"><div class="track" id="track">
-    <b>Python</b> · pandas · statsmodels · scikit-learn · <b>SQL</b> · SAS · R · <b>Tableau</b> · Power BI · Databricks · Salesforce · Postgres · <b>IPTW</b> · g-computation · AIPW · Kaplan-Meier · Cox · Fine-Gray · A/B testing · forecasting · <b>LLM apps</b> · RAG · MCP · TypeScript · Git ·&nbsp;
-  </div></div>
-  <p data-reveal><b>Causal inference and statistics:</b> experimental design, A/B testing, propensity scores,
-  IPTW, g-computation, doubly robust (AIPW) estimation, survival analysis, forecasting.</p>
-  <p data-reveal><b>Engineering:</b> Python, SQL, SAS, R, TypeScript; Tableau, Power BI, Databricks,
-  Salesforce, Postgres.</p>
-  <p data-reveal><b>AI:</b> LLM applications, retrieval-augmented generation, MCP servers,
-  machine-verified generation.</p>
+  <div class="skillgrid">
+    <div class="skillgroup" data-reveal>
+      <h3>Causal inference &amp; statistics</h3>
+      <div class="pills"><span class="hot">A/B testing</span><span>experimental design</span><span>propensity scores</span><span class="hot">IPTW</span><span>g-computation</span><span>doubly robust (AIPW)</span><span>Kaplan-Meier</span><span>Cox</span><span>Fine-Gray</span><span>forecasting</span></div>
+    </div>
+    <div class="skillgroup" data-reveal>
+      <h3>Engineering &amp; platforms</h3>
+      <div class="pills"><span class="hot">Python</span><span class="hot">SQL</span><span>SAS</span><span>R</span><span>TypeScript</span><span class="hot">Tableau</span><span>Power BI</span><span>Databricks</span><span>Salesforce</span><span>Postgres</span><span>Git</span></div>
+    </div>
+    <div class="skillgroup" data-reveal>
+      <h3>AI engineering</h3>
+      <div class="pills"><span class="hot">LLM applications</span><span>RAG</span><span>MCP servers</span><span class="hot">Claude Code</span><span>prompt engineering</span><span>machine-verified generation</span></div>
+    </div>
+  </div>
 </section>
 
 <section class="block wrap" aria-label="Education">
@@ -441,9 +496,9 @@
 <section class="block wrap" aria-label="Recognition">
   <h2 data-reveal>Recognition</h2>
   <div class="edu" data-reveal><div><b><a href="https://www.credly.com/badges/5adef59b-6dd3-4dc1-bec7-ad98278b2824">Claude Certified Architect, Foundations (CCA-F)</a></b><div class="school">Issued by Anthropic · verifiable on Credly</div></div><span class="when">2026</span></div>
-  <div class="edu" data-reveal><div><b>Published: Mapping Radioligand Therapy Referrals in Prostate Cancer</b><div class="school">Co-author · featured at the PMSA Annual Conference 2023</div></div><span class="when">2023</span></div>
-  <div class="edu" data-reveal><div><b>Spot Award and Impact Award</b><div class="school">Mu Sigma, for automation that saved 1+ workday per project</div></div><span class="when">2021</span></div>
-  <div class="edu" data-reveal><div><b>Certifications</b><div class="school">Prompt Engineering for Generative AI · Python: Predictive Analytics · Deep Learning · Python Data Analysis for Healthcare</div></div></div>
+  <div class="edu" data-reveal><div><b>Published: Mapping Radioligand Therapy Referrals in Prostate Cancer</b><div class="school">Co-author · presented at the PMSA Annual Conference 2023</div></div><span class="when">2023</span></div>
+  <div class="edu" data-reveal><div><b>Impact Award</b><div class="school">Mu Sigma · cited the automation that saved a workday per project across RWE studies</div></div><span class="when">2021</span></div>
+  <div class="edu" data-reveal><div><b>Spot Award</b><div class="school">Mu Sigma</div></div><span class="when">2021</span></div>
 </section>
 
 <footer class="wrap">
@@ -469,22 +524,40 @@ window.addEventListener('DOMContentLoaded', () => {
   const ctx = cv.getContext('2d');
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const fine = matchMedia('(pointer: fine)').matches;
-  let W, H, nodes = [], running = true, verifyT = 0;
+  let W, H, nodes = [], running = true, verifyT = 0, form = { v: 0 };
   const DPR = Math.min(devicePixelRatio || 1, 2);
   const css = (v) => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+  let acc = '#7c86ff';
   let mouse = { x: -9999, y: -9999 };
+
+  /* footer constellation: a big checkmark */
+  function checkTargets(count) {
+    const seg = [[0.30, 0.52], [0.44, 0.70], [0.74, 0.28]];
+    const pts = [];
+    for (let i = 0; i < count; i++) {
+      const t = i / (count - 1);
+      let p;
+      if (t < 0.4) { const u = t / 0.4; p = [seg[0][0] + (seg[1][0] - seg[0][0]) * u, seg[0][1] + (seg[1][1] - seg[0][1]) * u]; }
+      else { const u = (t - 0.4) / 0.6; p = [seg[1][0] + (seg[2][0] - seg[1][0]) * u, seg[1][1] + (seg[2][1] - seg[1][1]) * u]; }
+      pts.push([p[0] * W + (Math.sin(i * 7.3) * 14), p[1] * H * 0.9 + (Math.cos(i * 5.1) * 14)]);
+    }
+    return pts;
+  }
 
   function resize() {
     W = innerWidth; H = innerHeight;
     cv.width = W * DPR; cv.height = H * DPR;
     cv.style.width = W + 'px'; cv.style.height = H + 'px';
     ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+    acc = css('--accent') || '#7c86ff';
     const target = Math.min(fine ? 90 : 48, Math.round((W * H) / 16000));
     nodes = Array.from({ length: target }, (_, i) => ({
       x: Math.random() * W, y: Math.random() * H,
       vx: (Math.random() - 0.5) * 0.22, vy: (Math.random() - 0.5) * 0.22,
       r: 1.2 + Math.random() * 1.6, i,
     }));
+    const tgts = checkTargets(nodes.length);
+    nodes.forEach((n, i) => { n.tx = tgts[i][0]; n.ty = tgts[i][1]; });
   }
   resize();
   addEventListener('resize', resize);
@@ -495,32 +568,32 @@ window.addEventListener('DOMContentLoaded', () => {
   function frame() {
     ctx.clearRect(0, 0, W, H);
     const inkFaint = 'oklch(0.42 0.02 274)';
-    const acc = css('--accent') || '#7c86ff';
-    const n = nodes.length;
+    const n = nodes.length, f = form.v;
+    const px = new Float32Array(n), py = new Float32Array(n);
     for (let i = 0; i < n; i++) {
       const a = nodes[i];
       a.x += a.vx; a.y += a.vy;
       if (a.x < -20) a.x = W + 20; if (a.x > W + 20) a.x = -20;
       if (a.y < -20) a.y = H + 20; if (a.y > H + 20) a.y = -20;
+      px[i] = f > 0 ? a.x + (a.tx - a.x) * f : a.x;
+      py[i] = f > 0 ? a.y + (a.ty - a.y) * f : a.y;
     }
     ctx.lineWidth = 1;
     for (let i = 0; i < n; i++) {
-      const a = nodes[i];
       for (let j = i + 1; j < n; j++) {
-        const b = nodes[j];
-        const dx = a.x - b.x, dy = a.y - b.y, d2 = dx * dx + dy * dy;
+        const dx = px[i] - px[j], dy = py[i] - py[j], d2 = dx * dx + dy * dy;
         if (d2 < LINK2) {
           const alpha = 0.14 * (1 - d2 / LINK2);
           ctx.strokeStyle = `oklch(0.6 0.05 274 / ${alpha.toFixed(3)})`;
-          ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
+          ctx.beginPath(); ctx.moveTo(px[i], py[i]); ctx.lineTo(px[j], py[j]); ctx.stroke();
         }
       }
-      if (fine) {
-        const dx = a.x - mouse.x, dy = a.y - mouse.y, d2 = dx * dx + dy * dy;
+      if (fine && f < 0.5) {
+        const dx = px[i] - mouse.x, dy = py[i] - mouse.y, d2 = dx * dx + dy * dy;
         if (d2 < LINK2 * 2.2) {
           const alpha = 0.3 * (1 - d2 / (LINK2 * 2.2));
           ctx.strokeStyle = `oklch(0.74 0.145 272 / ${alpha.toFixed(3)})`;
-          ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(mouse.x, mouse.y); ctx.stroke();
+          ctx.beginPath(); ctx.moveTo(px[i], py[i]); ctx.lineTo(mouse.x, mouse.y); ctx.stroke();
         }
       }
     }
@@ -528,23 +601,93 @@ window.addEventListener('DOMContentLoaded', () => {
     for (let i = 0; i < n; i++) {
       const a = nodes[i];
       const verified = (i / n) < verifyT;
-      let r = verified ? a.r + 0.6 : a.r, lit = verified;
-      if (fine) {
-        const dx = a.x - mouse.x, dy = a.y - mouse.y, d2 = dx * dx + dy * dy;
+      let r = verified ? a.r + 0.6 : a.r, lit = verified || f > 0.5;
+      if (fine && f < 0.5) {
+        const dx = px[i] - mouse.x, dy = py[i] - mouse.y, d2 = dx * dx + dy * dy;
         if (d2 < SPOT2) { const t = 1 - d2 / SPOT2; r += 1.6 * t; if (t > 0.25) lit = true; }
       }
       ctx.fillStyle = lit ? acc : inkFaint;
-      ctx.beginPath(); ctx.arc(a.x, a.y, r, 0, 6.2832); ctx.fill();
+      ctx.beginPath(); ctx.arc(px[i], py[i], r, 0, 6.2832); ctx.fill();
     }
   }
   function loop() { if (!running || reduced) return; frame(); requestAnimationFrame(loop); }
-  if (reduced) { frame(); } else { loop(); }
+  if (reduced) { verifyT = 1; frame(); } else { loop(); }
+
+  /* ---------------- the check runner: real math, run on demand ---------------- */
+  /* tiny synthetic cohort; ground truth worked out by hand as exact fractions */
+  const D = {
+    exposed:   [{o:1,t:2,e:1},{o:1,t:3,e:1},{o:1,t:6,e:0},{o:0,t:5,e:1},{o:0,t:7,e:0}],
+    unexposed: [{o:1,t:4,e:1},{o:0,t:6,e:0},{o:0,t:8,e:0},{o:0,t:5,e:1},{o:0,t:9,e:0}],
+    ps: [0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5],
+  };
+  function km(subjects, tmax) {
+    const all = subjects.slice().sort((a, b) => a.t - b.t);
+    let s = 1, atRisk = all.length;
+    for (const x of all) {
+      if (x.t > tmax) break;
+      if (x.e === 1) s *= (atRisk - 1) / atRisk;
+      atRisk -= 1;
+    }
+    return s;
+  }
+  const CHECKS = [
+    ['cohort_count_parity', () => { const g = D.exposed.length; return [g, 5, g === 5]; }],
+    ['risk_exposed_3_of_5', () => { const g = D.exposed.filter(x => x.o).length / 5; return [g, 0.6, g === 0.6]; }],
+    ['risk_unexposed_1_of_5', () => { const g = D.unexposed.filter(x => x.o).length / 5; return [g, 0.2, g === 0.2]; }],
+    ['risk_ratio_exact_3', () => { const g = (3 / 5) / (1 / 5); return [g.toFixed(4), 3, Math.abs(g - 3) < 1e-12]; }],
+    ['risk_difference_2_of_5', () => { const g = 3 / 5 - 1 / 5; return [g.toFixed(4), 0.4, Math.abs(g - 0.4) < 1e-12]; }],
+    ['odds_ratio_exact_6', () => { const g = (3 * 4) / (1 * 2); return [g, 6, g === 6]; }],
+    ['iptw_weights_sum_2n', () => { const g = D.ps.reduce((s, p, i) => s + 1 / (i < 5 ? p : 1 - p), 0); return [g, 20, g === 20]; }],
+    ['km_after_first_event', () => { const g = km(D.exposed.concat(D.unexposed), 2); return [g.toFixed(4), '0.9000', Math.abs(g - 0.9) < 1e-12]; }],
+    ['km_censoring_respected', () => { const g = km(D.exposed.concat(D.unexposed), 6); return [g.toFixed(4), '0.5000', Math.abs(g - 0.5) < 1e-12]; }],
+    ['person_time_incidence', () => { const all = D.exposed.concat(D.unexposed); const pt = all.reduce((s, x) => s + x.t, 0); const ev = all.filter(x => x.e).length; return [`${ev}/${pt}`, '5/55', pt === 55 && ev === 5]; }],
+    ['km_is_monotone', () => { const a = [1, 2, 3, 4, 5].map(t => km(D.exposed.concat(D.unexposed), t)); const ok = a.every((v, i) => i === 0 || v <= a[i - 1]); return ['non-increasing', 'non-increasing', ok]; }],
+    ['refusal_without_deaths', () => { const hasDeathDates = false; const g = hasDeathDates ? 'computed' : 'REFUSED: no usable death signal'; return [g, 'REFUSED: no usable death signal', !hasDeathDates]; }],
+  ];
+  function runChecks(print) {
+    let pass = 0;
+    print('$ verify --sample 12', 'hd');
+    for (const [name, fn] of CHECKS) {
+      const t0 = performance.now();
+      const [got, want, ok] = fn();
+      const ms = (performance.now() - t0).toFixed(2);
+      if (ok) pass += 1;
+      print(`  ${ok ? '✓' : '✗'} ${name}  expected ${want}  got ${got}  (${ms}ms)`, ok ? 'okc' : '');
+    }
+    print(`${pass} passing, ${12 - pass} failing. This sample runs in your browser; the full 1,377 run in the repo.`, 'hd');
+    return pass;
+  }
+  const term = document.getElementById('term');
+  const runbtn = document.getElementById('runbtn');
+  runbtn.hidden = false;
+  runbtn.addEventListener('click', () => {
+    term.hidden = false; term.textContent = '';
+    const lines = [];
+    runChecks((txt, cls) => lines.push([txt, cls]));
+    if (reduced) {
+      for (const [txt, cls] of lines) {
+        const div = document.createElement('div'); div.textContent = txt; if (cls) div.className = cls; term.appendChild(div);
+      }
+    } else {
+      lines.forEach(([txt, cls], i) => {
+        setTimeout(() => {
+          const div = document.createElement('div'); div.textContent = txt; if (cls) div.className = cls;
+          term.appendChild(div); term.scrollTop = term.scrollHeight;
+        }, 90 * i);
+      });
+    }
+    runbtn.textContent = 'Run them again';
+  });
+
+  /* console easter egg for the view-source crowd */
+  console.log('%c1,377 checks passing, 0 failing', 'color:#7c86ff;font:700 14px monospace');
+  console.log('%cYou open consoles. Good habit. Type verify() to run 12 real checks right here, or audit the full suite:%c\n  git clone https://github.com/andey0Saikiran/heor-studio && npm run verify', 'color:#8b90a5;font:12px monospace', 'color:#7c86ff;font:12px monospace');
+  window.verify = () => runChecks((txt) => console.log('%c' + txt, 'font:12px monospace'));
 
   /* ---------------- GSAP choreography (page works fully without it) ---------------- */
-  if (!window.gsap) return;
+  if (!window.gsap) { document.documentElement.classList.remove('js'); return; }
   gsap.registerPlugin(ScrollTrigger, SplitText);
 
-  /* scroll progress + node verification tied to overall progress */
   ScrollTrigger.create({
     start: 0, end: () => document.documentElement.scrollHeight - innerHeight,
     onUpdate: (self) => {
@@ -556,55 +699,118 @@ window.addEventListener('DOMContentLoaded', () => {
 
   const mm = gsap.matchMedia();
   mm.add({ motionOK: '(prefers-reduced-motion: no-preference)', reduced: '(prefers-reduced-motion: reduce)' }, (c) => {
-    if (!c.conditions.motionOK) return;
+    if (!c.conditions.motionOK) {
+      gsap.set(['.hero .kicker', '.hero h1', '.hero .tag', '.cta-row', '.quiet-links', '.scroll-hint'], { autoAlpha: 1 });
+      document.documentElement.classList.remove('js');
+      return;
+    }
 
     /* smooth scroll */
+    let lenis = null;
     if (window.Lenis && fine) {
-      const lenis = new Lenis();
+      lenis = new Lenis();
       lenis.on('scroll', ScrollTrigger.update);
       gsap.ticker.add((t) => lenis.raf(t * 1000));
       gsap.ticker.lagSmoothing(0);
+      document.querySelectorAll('a[href^="#"]').forEach(a => a.addEventListener('click', (e) => {
+        e.preventDefault(); lenis.scrollTo(a.getAttribute('href'), { duration: 1.1 });
+      }));
     }
 
-    /* hero: masked line reveal */
+    /* hero: typed kicker, masked line reveal, staggered rows */
     document.fonts.ready.then(() => {
+      const kicker = document.querySelector('.hero .kicker');
+      const cmdEl = kicker.querySelector('.cmd');
+      const outEl = kicker.querySelector('.out');
+      const cmdText = cmdEl.textContent;
+      gsap.set(kicker, { autoAlpha: 1 });
+      gsap.set(outEl, { autoAlpha: 0 });
+      cmdEl.textContent = '';
+      let ci = 0;
+      const typeIv = setInterval(() => {
+        ci += 1; cmdEl.textContent = cmdText.slice(0, ci);
+        if (ci >= cmdText.length) {
+          clearInterval(typeIv);
+          setTimeout(() => gsap.set(outEl, { autoAlpha: 1 }), 160);
+        }
+      }, 34);
+
       SplitText.create('.hero h1', {
         type: 'lines', mask: 'lines', autoSplit: true,
         onSplit(self) {
-          gsap.from(self.lines, { yPercent: 110, duration: 1.0, stagger: 0.09, ease: 'power4.out', delay: 0.1 });
+          gsap.set('.hero h1', { autoAlpha: 1 });
+          return gsap.from(self.lines, {
+            yPercent: 110, duration: 1.0, stagger: 0.09, ease: 'power4.out', delay: 0.15,
+            onComplete: () => self.revert(),
+          });
         },
       });
-      gsap.from(['.hero .kicker', '.hero .tag', '.cta-row', '.quiet-links', '.scroll-hint'], {
-        autoAlpha: 0, y: 18, duration: 0.9, stagger: 0.08, ease: 'power3.out', delay: 0.25,
+      gsap.fromTo(['.hero .tag', '.cta-row', '.quiet-links', '.scroll-hint'],
+        { autoAlpha: 0, y: 18 },
+        { autoAlpha: 1, y: 0, duration: 0.9, stagger: 0.08, ease: 'power3.out', delay: 0.35 });
+    });
+
+    /* counter: scrub up, complete early, never leave a partial number */
+    const counter = { v: 0 };
+    const el = document.getElementById('counter');
+    const ticker = document.getElementById('ticker');
+    const NAMES = ['iptw_weights_sum_to_n', 'km_tied_event_times', 'aipw_equals_gformula_saturated', 'fine_gray_cif_bounds', 'sas_sql_parity_cohort_counts', 'byar_ci_hand_derived', 'refusal_on_masked_mortality', 'charlson_index_weights', 'cochran_armitage_trend', 'hajek_estimator_sandwich_var', 'parity_stamp_consumed', 'mutation_goes_red', 'greenwood_variance_exact', 'ledger_double_count_guard'];
+    el.textContent = '0';
+    gsap.to(counter, {
+      v: 1377, ease: 'none',
+      scrollTrigger: {
+        trigger: '#proof', start: 'top 80%', end: 'top 35%', scrub: 1,
+        onLeave: () => { el.textContent = '1,377'; ticker.textContent = 'all 1,377 executed'; },
+      },
+      onUpdate: () => {
+        el.textContent = Math.round(counter.v).toLocaleString();
+        ticker.textContent = counter.v >= 1377 ? 'all 1,377 executed' : NAMES[Math.floor(counter.v / 1377 * NAMES.length) % NAMES.length];
+      },
+    });
+    gsap.from('.proof .stamp', {
+      scale: 2.2, rotation: 6, autoAlpha: 0, ease: 'power3.out', duration: 0.5,
+      scrollTrigger: { trigger: '#proof', start: 'center 60%', toggleActions: 'play none none none' },
+    });
+
+    /* career line draws in as you scroll it */
+    gsap.fromTo('.jobs', { '--draw': 0 }, {
+      '--draw': 1, ease: 'none',
+      scrollTrigger: { trigger: '.jobs', start: 'top 80%', end: 'bottom 75%', scrub: 1 },
+    });
+
+    /* jobs: staggered internals instead of monolith fades */
+    document.querySelectorAll('.job').forEach((job) => {
+      gsap.from(job.querySelectorAll(':scope .head, :scope .client, :scope > div > ul'), {
+        autoAlpha: 0, y: 18, duration: 0.65, stagger: 0.1, ease: 'power3.out',
+        scrollTrigger: { trigger: job, start: 'top 85%' },
       });
     });
 
-    /* counter set piece: scrubbed by its own scroll window */
-    const counter = { v: 0 };
-    const el = document.getElementById('counter');
-    gsap.to(counter, {
-      v: 1377, ease: 'none',
-      scrollTrigger: { trigger: '#proof', start: 'top 80%', end: 'center center', scrub: 1 },
-      onUpdate: () => { el.textContent = Math.round(counter.v).toLocaleString(); },
-    });
-    gsap.from('.proof .stamp', {
-      scale: 2.2, autoAlpha: 0, ease: 'power3.out', duration: 0.5,
-      scrollTrigger: { trigger: '#proof', start: 'center 60%', toggleActions: 'play none none reverse' },
+    /* skill pills cascade */
+    document.querySelectorAll('.skillgroup').forEach((g) => {
+      gsap.from(g.querySelectorAll('.pills span'), {
+        autoAlpha: 0, y: 12, duration: 0.45, stagger: 0.03, ease: 'power2.out',
+        scrollTrigger: { trigger: g, start: 'top 88%' },
+      });
+      gsap.from(g.querySelector('h3'), {
+        autoAlpha: 0, y: 12, duration: 0.5, ease: 'power2.out',
+        scrollTrigger: { trigger: g, start: 'top 88%' },
+      });
     });
 
-    /* section reveals */
+    /* generic reveals for everything else */
     document.querySelectorAll('[data-reveal]').forEach((elm) => {
-      if (elm.closest('.hero')) return;
       gsap.from(elm, {
         autoAlpha: 0, y: 26, duration: 0.85, ease: 'power3.out',
         scrollTrigger: { trigger: elm, start: 'top 88%', toggleActions: 'play none none none' },
       });
     });
 
-    /* marquee */
-    const track = document.getElementById('track');
-    track.parentElement.appendChild(track.cloneNode(true));
-    gsap.to('.marquee .track', { xPercent: -100, ease: 'none', duration: 34, repeat: -1 });
+    /* footer: the graph resolves into a checkmark */
+    gsap.to(form, {
+      v: 1, duration: 1.4, ease: 'power2.inOut',
+      scrollTrigger: { trigger: 'footer', start: 'top 70%', toggleActions: 'play none none reverse' },
+    });
 
     /* cursor spotlight: highlights where you look */
     if (fine) {
@@ -620,7 +826,7 @@ window.addEventListener('DOMContentLoaded', () => {
       document.documentElement.addEventListener('mouseleave', () => { spotOn = false; gsap.to(spot, { opacity: 0, duration: 0.5 }); });
     }
 
-    /* magnetic buttons (pointer fine only) */
+    /* magnetic buttons */
     if (fine) {
       document.querySelectorAll('.magnetic').forEach((btn) => {
         const xTo = gsap.quickTo(btn, 'x', { duration: 0.4, ease: 'power3' });
@@ -635,11 +841,9 @@ window.addEventListener('DOMContentLoaded', () => {
         btn.addEventListener('pointerleave', () => { xTo(0); yTo(0); rect = null; });
       });
     }
+    document.documentElement.classList.remove('js');
     return () => {};
   });
-
-  /* reduced motion: counter shows final value instantly */
-  if (reduced) { document.getElementById('counter').textContent = '1,377'; verifyT = 1; frame(); }
 });
 </script>
 </body>

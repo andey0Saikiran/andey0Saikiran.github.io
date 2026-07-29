@@ -553,7 +553,9 @@ window.addEventListener('DOMContentLoaded', () => {
     const target = Math.min(fine ? 90 : 48, Math.round((W * H) / 16000));
     nodes = Array.from({ length: target }, (_, i) => ({
       x: Math.random() * W, y: Math.random() * H,
+      z: (Math.random() - 0.5) * 440,
       vx: (Math.random() - 0.5) * 0.22, vy: (Math.random() - 0.5) * 0.22,
+      vz: (Math.random() - 0.5) * 0.14,
       r: 1.2 + Math.random() * 1.6, i,
     }));
     const tgts = checkTargets(nodes.length);
@@ -564,19 +566,30 @@ window.addEventListener('DOMContentLoaded', () => {
   if (fine) addEventListener('pointermove', (e) => { mouse.x = e.clientX; mouse.y = e.clientY; }, { passive: true });
   document.addEventListener('visibilitychange', () => { running = !document.hidden; if (running && !reduced) loop(); });
 
-  const LINK = 130, LINK2 = LINK * LINK;
+  const LINK = 130, LINK2 = LINK * LINK, FOCAL = 900;
   function frame() {
     ctx.clearRect(0, 0, W, H);
     const inkFaint = 'oklch(0.42 0.02 274)';
     const n = nodes.length, f = form.v;
-    const px = new Float32Array(n), py = new Float32Array(n);
+    const px = new Float32Array(n), py = new Float32Array(n), ps = new Float32Array(n);
+    const t = performance.now() * 0.00005;
+    const rotY = Math.sin(t) * 0.22 + (fine ? (mouse.x / W - 0.5) * 0.3 : 0);
+    const rotX = Math.cos(t * 0.7) * 0.08 + (fine ? (mouse.y / H - 0.5) * 0.18 : 0);
+    const cy = Math.cos(rotY), sy = Math.sin(rotY);
+    const cx = Math.cos(rotX), sx = Math.sin(rotX);
     for (let i = 0; i < n; i++) {
       const a = nodes[i];
-      a.x += a.vx; a.y += a.vy;
+      a.x += a.vx; a.y += a.vy; a.z += a.vz;
       if (a.x < -20) a.x = W + 20; if (a.x > W + 20) a.x = -20;
       if (a.y < -20) a.y = H + 20; if (a.y > H + 20) a.y = -20;
-      px[i] = f > 0 ? a.x + (a.tx - a.x) * f : a.x;
-      py[i] = f > 0 ? a.y + (a.ty - a.y) * f : a.y;
+      if (a.z < -220) a.z = 220; if (a.z > 220) a.z = -220;
+      const wx = a.x - W / 2, wy = a.y - H / 2;
+      let rx = wx * cy - a.z * sy, rz = wx * sy + a.z * cy;
+      let ry = wy * cx - rz * sx; rz = wy * sx + rz * cx;
+      const sc = FOCAL / (FOCAL + rz + 260);
+      let ppx = W / 2 + rx * sc, ppy = H / 2 + ry * sc;
+      if (f > 0) { ppx += (a.tx - ppx) * f; ppy += (a.ty - ppy) * f; }
+      px[i] = ppx; py[i] = ppy; ps[i] = f > 0 ? sc + (1 - sc) * f : sc;
     }
     ctx.lineWidth = 1;
     for (let i = 0; i < n; i++) {
@@ -607,8 +620,10 @@ window.addEventListener('DOMContentLoaded', () => {
         if (d2 < SPOT2) { const t = 1 - d2 / SPOT2; r += 1.6 * t; if (t > 0.25) lit = true; }
       }
       ctx.fillStyle = lit ? acc : inkFaint;
-      ctx.beginPath(); ctx.arc(px[i], py[i], r, 0, 6.2832); ctx.fill();
+      ctx.globalAlpha = Math.min(1, Math.max(0.3, (ps[i] - 0.55) / 0.6));
+      ctx.beginPath(); ctx.arc(px[i], py[i], r * ps[i], 0, 6.2832); ctx.fill();
     }
+    ctx.globalAlpha = 1;
   }
   function loop() { if (!running || reduced) return; frame(); requestAnimationFrame(loop); }
   if (reduced) { verifyT = 1; frame(); } else { loop(); }

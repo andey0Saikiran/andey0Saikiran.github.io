@@ -114,17 +114,36 @@
   .lede b { color: var(--ink); font-weight: 600; }
   a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 3px; }
 
-  /* experience */
-  .job { display: grid; grid-template-columns: 9rem 1fr; gap: 1.5rem; padding: 1.7rem 0; border-top: 1px solid var(--line); }
-  .job:first-of-type { border-top: none; padding-top: 0; }
-  .job .when { font-family: var(--mono); font-size: 0.82rem; color: var(--faint); padding-top: 0.35rem; }
-  .job h3 { font-size: 1.18rem; font-weight: 680; letter-spacing: -0.01em; }
+  /* experience: the career as a connected chain */
+  .jobs { position: relative; }
+  .jobs::before {
+    content: ""; position: absolute; left: 7px; top: 20px; bottom: 26px; width: 1px;
+    background: linear-gradient(180deg, var(--accent), var(--line) 45%, var(--line));
+  }
+  .job { position: relative; padding: 1.6rem 0 1.6rem 2.4rem; }
+  .job::before {
+    content: ""; position: absolute; left: 3px; top: calc(1.6rem + 16px); width: 9px; height: 9px;
+    border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 4px var(--bg);
+    transition: box-shadow 0.3s;
+  }
+  .job:hover::before { box-shadow: 0 0 0 4px var(--bg), 0 0 14px 2px oklch(0.74 0.145 272 / 0.55); }
+  .job .head { display: flex; align-items: center; gap: 1.1rem; flex-wrap: wrap; }
+  .logo-chip {
+    background: #fff; border-radius: 10px; padding: 0.5rem 0.85rem; height: 46px; width: auto;
+    display: inline-flex; align-items: center; flex: none;
+    transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .logo-chip img { height: 100%; width: auto; max-width: 140px; object-fit: contain; display: block; }
+  .job:hover .logo-chip { transform: translateY(-2px); }
+  .job .head-main { flex: 1; min-width: 15rem; }
+  .job h3 { font-size: 1.16rem; font-weight: 680; letter-spacing: -0.01em; }
   .job h3 span { color: var(--dim); font-weight: 450; }
-  .job .where { color: var(--faint); font-size: 0.92rem; margin-top: 0.15rem; }
-  .job ul { margin: 0.7rem 0 0 1.1rem; color: var(--dim); }
+  .job .where { color: var(--faint); font-size: 0.9rem; margin-top: 0.1rem; }
+  .job .when { font-family: var(--mono); font-size: 0.82rem; color: var(--faint); margin-left: auto; }
+  .job ul { margin: 0.9rem 0 0 1.1rem; color: var(--dim); }
   .job li { margin-bottom: 0.45rem; text-wrap: pretty; }
   .job li b { color: var(--ink); font-weight: 600; }
-  @media (max-width: 640px) { .job { grid-template-columns: 1fr; gap: 0.3rem; } }
+  @media (max-width: 640px) { .job { padding-left: 1.6rem; } .job .when { margin-left: 0; width: 100%; } }
 
   /* projects */
   .project {
@@ -147,9 +166,14 @@
   @media (max-width: 640px) { .project { grid-template-columns: 1fr; } .project .plinks { justify-self: start; } }
 
   /* toolbox marquee */
-  .marquee { overflow: hidden; white-space: nowrap; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 1.1rem 0; margin-bottom: 2.5rem; }
-  .marquee .track { display: inline-block; font-family: var(--mono); font-size: 0.9rem; color: var(--faint); will-change: transform; }
-  .marquee .track b { color: var(--dim); font-weight: 500; }
+  .marquee {
+    overflow: hidden; white-space: nowrap; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
+    padding: 1.35rem 0; margin-bottom: 2.5rem;
+    mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+  }
+  .marquee .track { display: inline-block; font-family: var(--mono); font-size: 1.05rem; color: var(--dim); will-change: transform; }
+  .marquee .track b { color: var(--ink); font-weight: 600; }
   .skills p { margin-bottom: 0.8rem; color: var(--dim); max-width: 72ch; text-wrap: pretty; }
   .skills b { color: var(--ink); font-weight: 640; }
 
@@ -184,7 +208,7 @@
   @media print {
     :root { --bg: #fff; --bg-deep: #fff; --ink: #000; --dim: #222; --faint: #555; --accent: #000; --line: #bbb; }
     body { background: #fff; color: #000; font-size: 10pt; }
-    #graph, #progress, .scroll-hint, .marquee, .cta-row, footer .ask, .mail { display: none !important; }
+    #graph, #progress, .scroll-hint, .marquee, .cta-row, footer .ask, .mail, .logo-chip { display: none !important; }\n    .jobs::before, .job::before { display: none !important; }\n    .job { padding-left: 0; }
     .hero { min-height: auto; padding: 0 0 10pt; }
     .quiet-links a::after { content: "  " attr(href); font-size: 8pt; color: #444; }
     section.block, .proof { padding: 10pt 0; }
@@ -287,11 +311,17 @@
 <section class="block wrap" aria-label="Experience">
   <h2 data-reveal>Where I've worked</h2>
 
+  <div class="jobs">
   <div class="job" data-reveal>
-    <div class="when">2025 to now</div>
+    <div class="head">
+      <span class="logo-chip"><img src="logos/latentview.svg" alt="LatentView Analytics logo"></span>
+      <div class="head-main">
+        <h3>Operations Research Analyst, Revenue Intelligence</h3>
+        <p class="where">LatentView Analytics · San Francisco Bay Area · engagements at Veeam Software, Adobe, and Intuit</p>
+      </div>
+      <span class="when">2025 to now</span>
+    </div>
     <div>
-      <h3>Operations Research Analyst, Revenue Intelligence <span>· LatentView Analytics</span></h3>
-      <p class="where">San Francisco Bay Area · consulting engagements at Veeam Software, Adobe, and Intuit</p>
       <ul>
         <li>Modernized Revenue Intelligence reporting for a global sales org: legacy Salesforce to a next-generation platform, <b>15+ Tableau dashboards rebuilt with zero KPI disruption</b>.</li>
         <li>Designed and ran <b>A/B tests</b> on App Store product-page creative, measuring download conversion by variant.</li>
@@ -301,9 +331,15 @@
   </div>
 
   <div class="job" data-reveal>
-    <div class="when">2022 to 2023</div>
+    <div class="head">
+      <span class="logo-chip"><img src="logos/chryselys.png" alt="Chryselys logo"></span>
+      <div class="head-main">
+        <h3>Senior Analyst, Business Analytics</h3>
+        <p class="where">Chryselys · Hyderabad, India</p>
+      </div>
+      <span class="when">2022 to 2023</span>
+    </div>
     <div>
-      <h3>Senior Analyst, Business Analytics <span>· Chryselys</span></h3>
       <ul>
         <li>Patient-journey measurement framework over integrated claims data (client + IQVIA), tracing ten key encounters around each therapy administration.</li>
         <li>Raised provider-mapping accuracy by <b>60%</b>; co-authored a paper featured at PMSA 2023.</li>
@@ -312,9 +348,15 @@
   </div>
 
   <div class="job" data-reveal>
-    <div class="when">2022</div>
+    <div class="head">
+      <span class="logo-chip"><img src="logos/zs.png" alt="ZS Associates logo"></span>
+      <div class="head-main">
+        <h3>Decision Analytics Associate Consultant</h3>
+        <p class="where">ZS Associates · Pune, India</p>
+      </div>
+      <span class="when">2022</span>
+    </div>
     <div>
-      <h3>Decision Analytics Associate Consultant <span>· ZS Associates</span></h3>
       <ul>
         <li>KOL targeting that contributed to a <b>15% increase in Ozempic prescriptions</b> in Q2 2022; automation saving 12 hours per associate weekly.</li>
       </ul>
@@ -322,14 +364,21 @@
   </div>
 
   <div class="job" data-reveal>
-    <div class="when">2019 to 2022</div>
+    <div class="head">
+      <span class="logo-chip"><img src="logos/musigma.svg" alt="Mu Sigma logo"></span>
+      <div class="head-main">
+        <h3>Decision Scientist</h3>
+        <p class="where">Mu Sigma · Bengaluru, India</p>
+      </div>
+      <span class="when">2019 to 2022</span>
+    </div>
     <div>
-      <h3>Decision Scientist <span>· Mu Sigma</span></h3>
       <ul>
         <li>Real-World Evidence for oncology: hypothesis tests and <b>two-arm comparisons of treatment cohorts</b> supporting regulatory submissions and FDA label-extension protocols.</li>
         <li>Survival modeling (Kaplan-Meier, Cox) on Flatiron data; <b>reproduced a randomized melanoma trial's results from observational data</b>.</li>
       </ul>
     </div>
+  </div>
   </div>
 </section>
 
@@ -505,7 +554,7 @@ window.addEventListener('DOMContentLoaded', () => {
     /* marquee */
     const track = document.getElementById('track');
     track.parentElement.appendChild(track.cloneNode(true));
-    gsap.to('.marquee .track', { xPercent: -100, ease: 'none', duration: 28, repeat: -1 });
+    gsap.to('.marquee .track', { xPercent: -100, ease: 'none', duration: 34, repeat: -1 });
 
     /* magnetic buttons (pointer fine only) */
     if (fine) {

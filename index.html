@@ -696,7 +696,7 @@ window.addEventListener('DOMContentLoaded', () => {
   });
 
   /* console easter egg for the view-source crowd */
-  console.log('%c1,377 checks passing, 0 failing', 'color:#7c86ff;font:700 14px monospace');
+  console.log('%c2,563 checks across 24 groups, 0 failing', 'color:#7c86ff;font:700 14px monospace');
   console.log('%cYou open consoles. Good habit. Type verify() to run 12 real checks right here, or audit the full suite:%c\n  git clone https://github.com/andey0Saikiran/heor-studio && npm run verify', 'color:#8b90a5;font:12px monospace', 'color:#7c86ff;font:12px monospace');
   window.verify = () => runChecks((txt) => console.log('%c' + txt, 'font:12px monospace'));
 

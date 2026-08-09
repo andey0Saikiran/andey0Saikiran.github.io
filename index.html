@@ -290,7 +290,7 @@
 <div class="grain">
 
 <header class="hero wrap">
-  <p class="kicker"><span class="cmd">$ npm run verify</span><span class="out">&nbsp;&nbsp;1377 checks passing, 0 failing</span></p>
+  <p class="kicker"><span class="cmd">$ npm run verify</span><span class="out">&nbsp;&nbsp;2563 checks across 24 groups, 0 failing</span></p>
   <h1>Saikiran Andey builds numbers you can check.</h1>
   <p class="tag"><b>Data scientist.</b> Causal inference, commercial analytics, and AI products
   that verify their own output instead of asking for trust.</p>
@@ -308,7 +308,7 @@
 </header>
 
 <section class="proof wrap" id="proof">
-  <div class="big"><span id="counter">1,377</span><span class="ok"> ✓</span></div>
+  <div class="big"><span id="counter">2,563</span><span class="ok"> ✓</span></div>
   <div class="ticker" id="ticker" aria-hidden="true"></div>
   <p class="cap">verification checks passing in HEOR Studio, the causal-inference engine below.<br>
   Every number it emits was executed and compared to results worked out by hand. <b>Zero failing.</b></p>
@@ -337,7 +337,7 @@
     The model writes a reviewable spec, deterministic emitters write the code, and every
     emitted number is executed against ground truth derived by hand. <b>When an analysis cannot
     be computed honestly, it refuses and says why.</b></p>
-    <div class="fact">1,377 checks passing · 0 failing · mutation-tested</div>
+    <div class="fact">2,563 checks passing · 0 failing · mutation-tested</div>
     <div class="tags"><span>causal inference</span><span>TypeScript</span><span>Postgres</span><span>SAS</span><span>AGPL-3.0</span></div>
   </article>
 
@@ -402,6 +402,7 @@
         <div class="client-head"><span class="mini-chip"><img src="logos/adobe.png" alt="Adobe logo"></span><b>Adobe · Mobile Analytics</b><span class="cdates">Sep 2025 to Feb 2026</span></div>
         <ul>
           <li>Designed and ran <b>A/B tests on App Store product-page creative</b>, measuring download conversion by screenshot variant; the readouts decided which creative went live.</li>
+          <li>Measured <b>paid media performance for mobile user acquisition</b>: cost per install and monthly active users, in dashboards built for growth and lifecycle marketing teams.</li>
           <li>Architected a <b>RAG system over 10K+ weekly call transcripts</b>, cutting meeting prep by about 8 hours a week.</li>
         </ul>
       </div>
@@ -473,7 +474,7 @@
   <div class="skillgrid">
     <div class="skillgroup" data-reveal>
       <h3>Causal inference &amp; statistics</h3>
-      <div class="pills"><span class="hot">A/B testing</span><span>experimental design</span><span>propensity scores</span><span class="hot">IPTW</span><span>g-computation</span><span>doubly robust (AIPW)</span><span>Kaplan-Meier</span><span>Cox</span><span>Fine-Gray</span><span>forecasting</span></div>
+      <div class="pills"><span class="hot">A/B testing</span><span>holdout testing</span><span>incrementality measurement</span><span>experimental design</span><span>propensity scores</span><span class="hot">IPTW</span><span>g-computation</span><span>doubly robust (AIPW)</span><span>Kaplan-Meier</span><span>Cox</span><span>Fine-Gray</span><span>forecasting</span></div>
     </div>
     <div class="skillgroup" data-reveal>
       <h3>Engineering &amp; platforms</h3>
@@ -669,7 +670,7 @@ window.addEventListener('DOMContentLoaded', () => {
       if (ok) pass += 1;
       print(`  ${ok ? '✓' : '✗'} ${name}  expected ${want}  got ${got}  (${ms}ms)`, ok ? 'okc' : '');
     }
-    print(`${pass} passing, ${12 - pass} failing. This sample runs in your browser; the full 1,377 run in the repo.`, 'hd');
+    print(`${pass} passing, ${12 - pass} failing. This sample runs in your browser; the full 2,563 run in the repo.`, 'hd');
     return pass;
   }
   const term = document.getElementById('term');
@@ -772,14 +773,14 @@ window.addEventListener('DOMContentLoaded', () => {
     const NAMES = ['iptw_weights_sum_to_n', 'km_tied_event_times', 'aipw_equals_gformula_saturated', 'fine_gray_cif_bounds', 'sas_sql_parity_cohort_counts', 'byar_ci_hand_derived', 'refusal_on_masked_mortality', 'charlson_index_weights', 'cochran_armitage_trend', 'hajek_estimator_sandwich_var', 'parity_stamp_consumed', 'mutation_goes_red', 'greenwood_variance_exact', 'ledger_double_count_guard'];
     el.textContent = '0';
     gsap.to(counter, {
-      v: 1377, ease: 'none',
+      v: 2563, ease: 'none',
       scrollTrigger: {
         trigger: '#proof', start: 'top 80%', end: 'top 35%', scrub: 1,
-        onLeave: () => { el.textContent = '1,377'; ticker.textContent = 'all 1,377 executed'; },
+        onLeave: () => { el.textContent = '2,563'; ticker.textContent = 'all 2,563 executed'; },
       },
       onUpdate: () => {
         el.textContent = Math.round(counter.v).toLocaleString();
-        ticker.textContent = counter.v >= 1377 ? 'all 1,377 executed' : NAMES[Math.floor(counter.v / 1377 * NAMES.length) % NAMES.length];
+        ticker.textContent = counter.v >= 2563 ? 'all 2,563 executed' : NAMES[Math.floor(counter.v / 2563 * NAMES.length) % NAMES.length];
       },
     });
     gsap.from('.proof .stamp', {

@@ -313,8 +313,8 @@
   <p class="cap">verification checks passing in HEOR Studio, the causal-inference engine below.<br>
   Every number it emits was executed and compared to results worked out by hand. <b>Zero failing.</b></p>
   <span class="stamp">MACHINE-VERIFIED</span>
-  <p class="sub">Don't take the page's word for it: <a href="https://github.com/andey0Saikiran/heor-studio">audit the full suite</a>, or run a sample right here.</p>
-  <button class="runbtn" id="runbtn" hidden>Run 12 of the checks in your browser</button>
+  <p class="sub">Don't take the page's word for it: <a href="https://github.com/andey0Saikiran/heor-studio">audit the full suite</a>, or run 12 checks built the same way, right here.</p>
+  <button class="runbtn" id="runbtn" hidden>Run 12 checks in your browser</button>
   <div id="term" hidden aria-live="polite"></div>
 </section>
 
@@ -327,7 +327,7 @@
 </section>
 
 <section class="block wrap" id="work" aria-label="Projects">
-  <h2 data-reveal>Things I built, all public</h2>
+  <h2 data-reveal>Things I built</h2>
 
   <article class="project" data-reveal>
     <h3><a href="https://github.com/andey0Saikiran/heor-studio">HEOR Studio</a></h3>
@@ -350,7 +350,7 @@
     <p>A free tool that audits Tableau workbooks <b>entirely in the browser</b>: dead fields,
     duplicate calculations, a 15-rule performance lint, workbook diffing, and the dependency
     graph this page&rsquo;s background is a nod to. Nothing is uploaded.</p>
-    <div class="fact">10.5K+ visitors, 45K+ requests in month one</div>
+    <div class="fact">11 MCP tools · on npm and the official MCP Registry</div>
     <div class="tags"><span>TypeScript</span><span>data viz</span><span>MCP server</span><span>Cloudflare</span></div>
   </article>
 
@@ -647,19 +647,26 @@ window.addEventListener('DOMContentLoaded', () => {
     }
     return s;
   }
+  /* estimators under test: each one reads the cohort, so a wrong count or a swapped arm fails */
+  const risk = (arm) => arm.filter(x => x.o).length / arm.length;
+  const odds = (arm) => { const a = arm.filter(x => x.o).length; return a / (arm.length - a); };
+  /* overall survival needs a death date on someone; with none, refuse instead of guessing */
+  const overallSurvival = (subjects) => subjects.some(x => x.death != null)
+    ? km(subjects.map(x => ({ t: x.death ?? x.t, e: x.death != null ? 1 : 0 })), Infinity).toFixed(4)
+    : 'REFUSED: no usable death signal';
   const CHECKS = [
     ['cohort_count_parity', () => { const g = D.exposed.length; return [g, 5, g === 5]; }],
     ['risk_exposed_3_of_5', () => { const g = D.exposed.filter(x => x.o).length / 5; return [g, 0.6, g === 0.6]; }],
     ['risk_unexposed_1_of_5', () => { const g = D.unexposed.filter(x => x.o).length / 5; return [g, 0.2, g === 0.2]; }],
-    ['risk_ratio_exact_3', () => { const g = (3 / 5) / (1 / 5); return [g.toFixed(4), 3, Math.abs(g - 3) < 1e-12]; }],
-    ['risk_difference_2_of_5', () => { const g = 3 / 5 - 1 / 5; return [g.toFixed(4), 0.4, Math.abs(g - 0.4) < 1e-12]; }],
-    ['odds_ratio_exact_6', () => { const g = (3 * 4) / (1 * 2); return [g, 6, g === 6]; }],
+    ['risk_ratio_exact_3', () => { const g = risk(D.exposed) / risk(D.unexposed); return [g.toFixed(4), 3, Math.abs(g - 3) < 1e-12]; }],
+    ['risk_difference_2_of_5', () => { const g = risk(D.exposed) - risk(D.unexposed); return [g.toFixed(4), 0.4, Math.abs(g - 0.4) < 1e-12]; }],
+    ['odds_ratio_exact_6', () => { const g = odds(D.exposed) / odds(D.unexposed); return [g, 6, Math.abs(g - 6) < 1e-12]; }],
     ['iptw_weights_sum_2n', () => { const g = D.ps.reduce((s, p, i) => s + 1 / (i < 5 ? p : 1 - p), 0); return [g, 20, g === 20]; }],
     ['km_after_first_event', () => { const g = km(D.exposed.concat(D.unexposed), 2); return [g.toFixed(4), '0.9000', Math.abs(g - 0.9) < 1e-12]; }],
     ['km_censoring_respected', () => { const g = km(D.exposed.concat(D.unexposed), 6); return [g.toFixed(4), '0.5000', Math.abs(g - 0.5) < 1e-12]; }],
     ['person_time_incidence', () => { const all = D.exposed.concat(D.unexposed); const pt = all.reduce((s, x) => s + x.t, 0); const ev = all.filter(x => x.e).length; return [`${ev}/${pt}`, '5/55', pt === 55 && ev === 5]; }],
     ['km_is_monotone', () => { const a = [1, 2, 3, 4, 5].map(t => km(D.exposed.concat(D.unexposed), t)); const ok = a.every((v, i) => i === 0 || v <= a[i - 1]); return ['non-increasing', 'non-increasing', ok]; }],
-    ['refusal_without_deaths', () => { const hasDeathDates = false; const g = hasDeathDates ? 'computed' : 'REFUSED: no usable death signal'; return [g, 'REFUSED: no usable death signal', !hasDeathDates]; }],
+    ['refusal_without_deaths', () => { const g = overallSurvival(D.exposed.concat(D.unexposed)); return [g, 'REFUSED: no usable death signal', g === 'REFUSED: no usable death signal']; }],
   ];
   function runChecks(print) {
     let pass = 0;
@@ -671,7 +678,7 @@ window.addEventListener('DOMContentLoaded', () => {
       if (ok) pass += 1;
       print(`  ${ok ? '✓' : '✗'} ${name}  expected ${want}  got ${got}  (${ms}ms)`, ok ? 'okc' : '');
     }
-    print(`${pass} passing, ${12 - pass} failing. This sample runs in your browser; the full 2,563 run in the repo.`, 'hd');
+    print(`${pass} passing, ${12 - pass} failing. These 12 are written the way HEOR Studio's are: a tiny cohort worked out by hand, then by code. The full suite of 2,563 runs in the repo.`, 'hd');
     return pass;
   }
   const term = document.getElementById('term');

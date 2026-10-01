@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Saikiran Andey, Data Scientist</title>
+<title>Saikiran Andey, Operations Research Analyst</title>
 <meta name="description" content="Data scientist working where commercial analytics meets causal inference. Builder of HEOR Studio, tableau-lineage.com, and Eigen-Rho.">
-<meta property="og:title" content="Saikiran Andey, Data Scientist">
+<meta property="og:title" content="Saikiran Andey, Operations Research Analyst">
 <meta property="og:description" content="Causal inference, commercial analytics, and AI products that verify their own numbers.">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='18' fill='%23101018'/><circle cx='30' cy='60' r='7' fill='%237c86ff'/><circle cx='62' cy='32' r='7' fill='white'/><circle cx='72' cy='72' r='7' fill='white'/><path d='M30 60 62 32M30 60 72 72' stroke='white' stroke-width='3' opacity='.5'/></svg>">
 <script>document.documentElement.classList.add('js');setTimeout(function(){document.documentElement.classList.remove('js')},1800);</script>
@@ -357,10 +357,9 @@
   <article class="project" data-reveal>
     <h3><a href="https://eigen-rho.com">Eigen-Rho</a></h3>
     <div class="plinks"><a class="roll" href="https://eigen-rho.com"><span data-t="Live ↗">Live ↗</span></a></div>
-    <p>An AI-proctored technical assessment platform. Grading runs against <b>live Postgres
-    execution</b> instead of trusting the model, with anti-cheat forensics and statistical
-    integrity signals.</p>
-    <div class="fact">20+ concurrent assessment sessions on a 2GB instance · live in production</div>
+    <p>A live SQL interview platform. Each answer is graded by <b>running it on Postgres</b>
+    (PGlite) instead of trusting a model, with its own schema and read-only role per case.</p>
+    <div class="fact">Load-tested at 20 concurrent distinct cases · 0 errors · 14 ms p95</div>
     <div class="tags"><span>LLM product</span><span>Node</span><span>PGlite</span><span>proctoring</span></div>
   </article>
 
@@ -370,7 +369,7 @@
       <a class="roll" href="https://andey0saikiran.github.io/clipshuttle/"><span data-t="Live ↗">Live ↗</span></a>
       <a class="roll" href="https://github.com/andey0Saikiran/clipshuttle"><span data-t="Source ↗">Source ↗</span></a>
     </div>
-    <p>A YouTube-to-Premiere panel for a video editor's real workflow, <b>built end-to-end with
+    <p>A YouTube-to-Premiere panel for a photographer friend's real workflow, <b>built end-to-end with
     Claude Code</b>. Paste a link, pick a quality, the clip lands in the project.</p>
     <div class="fact">Adobe CEP extension · shipped v1.0 · MIT</div>
     <div class="tags"><span>JavaScript</span><span>Adobe CEP</span><span>ffmpeg</span></div>
@@ -392,25 +391,26 @@
     </div>
     <div>
       <div class="client">
-        <div class="client-head"><span class="mini-chip"><img src="logos/veeam.png" alt="Veeam logo"></span><b>Veeam Software · Revenue Intelligence</b><span class="cdates">Feb 2026 to now</span></div>
+        <div class="client-head"><b>Veeam Software · client, via LatentView</b><span class="cdates">Feb 2026 to now</span></div>
         <ul>
-          <li>Building <b>MCP servers and AI agents on Databricks</b>, including a Customer 360 churn-intelligence agent in Microsoft Teams that gives sales reps and solution engineers live updates directly from the agent, cutting turnaround time for customer-facing roles.</li>
-          <li>Partnered with <b>30+ stakeholders</b> globally from Finance, Sales and Marketing teams to drive end-to-end analytics for the Global Sales and Insights Organization.</li>
-          <li>Delivered <b>weekly narratives</b> to Finance leadership on marketing initiatives and their impact on sales leads, connecting the agent insights and stakeholder analytics into a single summary for executives.</li>
+          <li>Built and tested <b>3 MCP servers</b> (churn risk, customer 360 profile, CRM records from Salesforce-sourced tables in Databricks) with <b>15+ tools</b> behind a Claude agent in Microsoft Teams that maps each rep to their own accounts through their Teams sign-in; passed final UAT with <b>zero errors</b> ahead of an October 2026 rollout to <b>700 sales team members</b>.</li>
+          <li>Found in an earlier UAT round that contracts expiring on the 29th usually roll into the following days, and added grace-period windows to the churn logic so those accounts were not flagged as churn risk by mistake.</li>
+          <li>Built entity resolution in SQL and Python, applying probabilistic record linkage and statistical matching across <b>1M+ records</b> to improve matching accuracy by <b>about 30%</b> and produce the de-duplicated master dataset the revenue reporting runs on.</li>
+          <li>Migrated the revenue reporting data architecture from legacy to next-generation Salesforce, re-engineering the KPI logic and reconciling each KPI against its legacy definition while rebuilding <b>15+ Tableau dashboards</b> the global sales organization uses daily, with no disruption to business-critical KPIs through the cutover.</li>
         </ul>
       </div>
       <div class="client">
-        <div class="client-head"><span class="mini-chip"><img src="logos/adobe.png" alt="Adobe logo"></span><b>Adobe · Mobile Analytics</b><span class="cdates">Sep 2025 to Feb 2026</span></div>
+        <div class="client-head"><b>Adobe · client, via LatentView</b><span class="cdates">Sep 2025 to Feb 2026</span></div>
         <ul>
-          <li>Leveraged agentic AI tools to automate the RCA process, identifying fluctuations in <b>CPI</b> due to varying paid media spend.</li>
-          <li>Performed end-to-end analytics for the Paid Media team on how spend drives <b>mobile installations</b> across regions, preparing executive-ready insights.</li>
-          <li>Worked on an <b>early dormancy detection model</b> for the lifecycle marketing team, understanding which signals detect dormancy early.</li>
+          <li>Wrote automation scripts, using agentic AI tools, that pull CPI (cost per install) for <b>4 regions</b> (AMER, EMEA, APAC, Japan) for week-over-week comparisons, and ran root-cause deep dives tying CPI swings to paid media spend for the mobile-analytics team.</li>
+          <li>Built Power BI dashboards for MAU and CPI analysis with the mobile-analytics and lifecycle-marketing teams.</li>
+          <li>Built an early dormancy detection model that Lifecycle Marketing used to prioritize retention interventions.</li>
         </ul>
       </div>
       <div class="client">
-        <div class="client-head"><span class="mini-chip"><img src="logos/intuit.png" alt="Intuit logo"></span><b>Intuit · Sales &amp; Inventory Analytics</b><span class="cdates">May 2025 to Sep 2025</span></div>
+        <div class="client-head"><b>Intuit · client, via LatentView</b><span class="cdates">May 2025 to Sep 2025</span></div>
         <ul>
-          <li>Partnered with <b>6+ sales and business organizations</b>, building entity-resolution pipelines across <b>1M+ records</b> that improved matching accuracy by <b>30%</b>, and presented executive leadership with strategic insights that shaped sales strategy.</li>
+          <li>Automated sales and inventory analytics pipelines in Python with model retraining feeding the reporting dashboards, and applied fuzzy-logic deduplication to improve data matching; ran <b>10+ knowledge-transfer sessions</b> with the offshore team, backed by process documentation.</li>
         </ul>
       </div>
     </div>
@@ -427,9 +427,9 @@
     </div>
     <div>
       <ul>
-        <li>Closed IQVIA data gaps with web scraping and fuzzy-logic matching, raising NPI mapping accuracy by <b>60%</b> so field teams could reach the right providers.</li>
-        <li>Built a journey framework tracing <b>10 key healthcare encounters</b> (5 preceding, 5 following each administration), surfacing the referral patterns and adoption drivers that guided field strategy.</li>
-        <li>Co-authored a patient-journey research paper presented at the <b>PMSA Annual Conference 2023</b>.</li>
+        <li>Built provider identity resolution to NPI records for Prostate Radioligand Therapy providers and organizations, closing IQVIA data gaps with web scraping and fuzzy-logic matching and raising NPI mapping accuracy by <b>60%</b>.</li>
+        <li>Designed wireframes, then built a validation interface that automated descriptive statistics and data-quality checks on incoming client data, replacing manual review.</li>
+        <li>Built a patient-journey process tracing <b>10 key encounters</b> around each therapy administration date across integrated client and IQVIA data, and co-authored the patient-journey paper presented at the PMSA Annual Conference 2023.</li>
       </ul>
     </div>
   </div>
@@ -445,8 +445,9 @@
     </div>
     <div>
       <ul>
-        <li>Streamlined commercial data aggregation for Key Opinion Leader targeting that contributed to a <b>15% increase in Ozempic prescriptions</b> in Q2 2022.</li>
-        <li>Established Salesforce data-governance processes with Agile Python/VBA automation, achieving a <b>100% reduction in manual errors</b> and saving <b>12 hours per associate weekly</b>.</li>
+        <li>Set up Salesforce data-governance processes after a gap analysis with business stakeholders, with Python/VBA automation that eliminated manual data-entry errors and saved <b>about 12 hours per associate weekly</b>.</li>
+        <li>Took Salesforce-integrated workflows through requirements, user-acceptance testing and troubleshooting with onshore stakeholders, coordinating <b>5 associates</b>.</li>
+        <li>Streamlined commercial data aggregation for Key Opinion Leader (KOL) targeting, contributing to a <b>15% increase</b> in targeted prescriptions in Q2 2022.</li>
       </ul>
     </div>
   </div>
@@ -462,8 +463,9 @@
     </div>
     <div>
       <ul>
-        <li><b>Reproduced a randomized melanoma trial's results from observational data</b>, using Kaplan-Meier and Cox survival models on Flatiron records.</li>
-        <li>Ran hypothesis tests and two-arm treatment-cohort comparisons supporting regulatory submissions and <b>FDA label-extension protocols</b>.</li>
+        <li>Automated the recurring patient-pool extraction, cost, incidence, prevalence and survival-modeling workflows in Python and SAS, saving <b>1+ workday per project</b>.</li>
+        <li>Built data-governance and QA workflows in SAS and Python that cut errors and analysis time by <b>over 90%</b>, with reusable scripts adopted across multiple teams.</li>
+        <li>Built Kaplan-Meier and Cox proportional-hazards models on Flatiron oncology data (cohorts from Dx/Rx codes) comparing on-label and off-label outcomes, and helped reproduce a randomized melanoma trial&rsquo;s results from real-world data.</li>
       </ul>
     </div>
   </div>
@@ -500,7 +502,7 @@
   <div class="edu" data-reveal><div><b><a href="https://www.credly.com/badges/5adef59b-6dd3-4dc1-bec7-ad98278b2824">Claude Certified Architect, Foundations (CCA-F)</a></b><div class="school">Issued by Anthropic · verifiable on Credly</div></div><span class="when">2026</span></div>
   <div class="edu" data-reveal><div><b>Encore Award</b><div class="school">LatentView Analytics · certificate of appreciation for outstanding performance, April to June 2026</div></div><span class="when">2026</span></div>
   <div class="edu" data-reveal><div><b>Published: Mapping Radioligand Therapy Referrals in Prostate Cancer</b><div class="school">Co-author · presented at the PMSA Annual Conference 2023</div></div><span class="when">2023</span></div>
-  <div class="edu" data-reveal><div><b>Impact Award</b><div class="school">Mu Sigma · founding member of the "Creating Order Out Of Chaos" (COOOC) initiative; built its governance framework</div></div><span class="when">2021</span></div>
+  <div class="edu" data-reveal><div><b>Impact Award</b><div class="school">Mu Sigma · one of the first members of the "Creating Order Out Of Chaos" (COOOC) initiative; with the team, created and implemented its governance framework</div></div><span class="when">2021</span></div>
   <div class="edu" data-reveal><div><b>Spot Award</b><div class="school">Mu Sigma · key contributor to the team&rsquo;s 2020 automation goals</div></div><span class="when">2021</span></div>
 </section>
 

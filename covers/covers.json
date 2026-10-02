@@ -1,0 +1,206 @@
+{
+  "note": "Written by scripts/build-covers.mjs. Real captures of each product; see the script for what was clicked. Do not edit by hand: run the script, or --check to verify the files.",
+  "covers": {
+    "tableau-workbook-auditor": {
+      "source": "https://tableau-lineage.com",
+      "capturedAt": "2026-10-01",
+      "cookies": "none shown",
+      "frame": {
+        "width": 1230,
+        "height": 705,
+        "scale": 2
+      },
+      "sourceLabel": "tableau-lineage.com",
+      "state": "Sample workbook loaded with the site's own button; lineage graph with clusters off, settled, fitted. The physics layout differs from run to run.",
+      "caption": "Its sample workbook, traced in the tab",
+      "alt": "The lineage graph tableau-lineage.com draws for its sample workbook: parameters, calculated fields, raw fields and worksheets as linked nodes.",
+      "files": {
+        "small": {
+          "src": "/covers/tableau-workbook-auditor-640.jpg",
+          "width": 640,
+          "height": 367,
+          "bytes": 28768,
+          "quality": 84,
+          "sha256": "b3bbe433f55a2a08d1486c047d1ef62a7febe346088ae9940dc30ad703625fee"
+        },
+        "large": {
+          "src": "/covers/tableau-workbook-auditor-1280.jpg",
+          "width": 1280,
+          "height": 734,
+          "bytes": 74121,
+          "quality": 80,
+          "sha256": "77655e718007af5503d41e6930fab4d1ea2ee89ebfe9c433c9b68f4d7bcf88e9"
+        },
+        "phone": {
+          "src": "/covers/tableau-workbook-auditor-phone-1080.jpg",
+          "width": 1080,
+          "height": 360,
+          "bytes": 21468,
+          "quality": 82,
+          "sha256": "c3d11835cae95b195de19680c225b40f7183dc8a5ebbff2f63353bf9fcc0937f"
+        }
+      },
+      "phone": {
+        "capturedAt": "2026-10-01",
+        "cookies": "none shown",
+        "state": "The same sample graph, settled and frozen, then zoomed (the graph's own zoom) to one parameter and a field it feeds, the first pair whose frame holds no overlapping nodes, so their labels read at phone width.",
+        "frame": {
+          "width": 360,
+          "height": 120,
+          "scale": 3
+        }
+      }
+    },
+    "heor-studio": {
+      "source": "https://heor-studio.andey-s.workers.dev",
+      "capturedAt": "2026-10-01",
+      "cookies": "none shown",
+      "frame": {
+        "width": 1440,
+        "height": 840,
+        "scale": 2
+      },
+      "sourceLabel": "heor-studio.andey-s.workers.dev",
+      "state": "Fresh visit, no key entered; “Load a demo study”, then the generated code pane as the app opens it.",
+      "caption": "The demo study, signed off and emitted",
+      "alt": "HEOR Studio after loading its demo study: the generated code pane, with tabs for the SAS and the SQL it wrote and the study’s files listed in order.",
+      "files": {
+        "small": {
+          "src": "/covers/heor-studio-640.jpg",
+          "width": 640,
+          "height": 373,
+          "bytes": 43850,
+          "quality": 84,
+          "sha256": "bdc0d5161c200d63d5c4b0a7da2001761121b32abb6eb5eb2676ebcba16eed58"
+        },
+        "large": {
+          "src": "/covers/heor-studio-1280.jpg",
+          "width": 1280,
+          "height": 747,
+          "bytes": 119786,
+          "quality": 76,
+          "sha256": "89d807ce90276478a857f50430ad10025ecbd592f94bd49a1d0228a610deaee7"
+        },
+        "phone": {
+          "src": "/covers/heor-studio-phone-1080.jpg",
+          "width": 1080,
+          "height": 360,
+          "bytes": 23493,
+          "quality": 82,
+          "sha256": "83b2802fdbf4981c8c23215ef42b52eb3f70406303b1e61c91fbe9dad2f9275e"
+        }
+      },
+      "phone": {
+        "capturedAt": "2026-10-01",
+        "cookies": "none shown",
+        "state": "The same demo study at the same moment; the head of the generated code pane: its title and the SAS and SQL tabs.",
+        "frame": {
+          "width": 360,
+          "height": 120,
+          "scale": 3
+        }
+      }
+    },
+    "eigen-rho": {
+      "source": "https://eigen-rho.com",
+      "capturedAt": "2026-10-01",
+      "cookies": "none shown",
+      "frame": {
+        "width": 544,
+        "height": 649,
+        "scale": 2
+      },
+      "sourceLabel": "eigen-rho.com",
+      "state": "Public landing page only; the sample-case console after it ran a query on its own. Cropped to the console.",
+      "caption": "The sample case on the public site",
+      "alt": "The sample case console from eigen-rho.com: a dark SQL editor with the question for one step of a case called The Vanishing SKU and the query that answers it.",
+      "files": {
+        "small": {
+          "src": "/covers/eigen-rho-560.jpg",
+          "width": 560,
+          "height": 668,
+          "bytes": 40125,
+          "quality": 84,
+          "sha256": "a61cfc601387c55475233bc8eefc579a5067711e3e079754e0b791fd1fc01c5b"
+        },
+        "large": {
+          "src": "/covers/eigen-rho-1120.jpg",
+          "width": 1120,
+          "height": 1336,
+          "bytes": 84510,
+          "quality": 80,
+          "sha256": "4b0a6ce05e5afff291955020c835437bbef43bfad0e0e16bfafa566f0145615a"
+        },
+        "phone": {
+          "src": "/covers/eigen-rho-phone-1080.jpg",
+          "width": 1080,
+          "height": 360,
+          "bytes": 37173,
+          "quality": 82,
+          "sha256": "85a1b83442018e284ac3830268e76c9376946f312c5e9aebce7a9af27ce23328"
+        }
+      },
+      "phone": {
+        "capturedAt": "2026-10-01",
+        "cookies": "none shown",
+        "state": "The same console at the same moment; the step's question and its query lines, cropped close.",
+        "frame": {
+          "width": 360,
+          "height": 120,
+          "scale": 3
+        }
+      }
+    },
+    "clipshuttle": {
+      "source": "https://github.com/andey0Saikiran/clipshuttle/blob/5677038/docs/panel.png",
+      "capturedAt": "2026-07-22",
+      "commit": "6306f4b",
+      "originalSha256": "f8bc25408b4ab1f143dcb803f3be329c8243ecf728da82a901ce9ca7b5f6f2cb",
+      "frame": {
+        "width": 860,
+        "height": 392,
+        "scale": 2
+      },
+      "sourceLabel": "the ClipShuttle repo",
+      "state": "The panel screenshot committed in the public repo, cropped to its download settings: from the Quality picker to the bottom of the card that holds the Download button. The fetched video's title above and the downloads list below are a third party's, so they stay out.",
+      "caption": "Its download settings, as it ships",
+      "alt": "The ClipShuttle panel’s download settings: a quality picker, the folder it saves to, the box that imports the clip into the open project, and the Download button.",
+      "files": {
+        "small": {
+          "src": "/covers/clipshuttle-400.jpg",
+          "width": 400,
+          "height": 182,
+          "bytes": 9589,
+          "quality": 84,
+          "sha256": "66c2e2cfbafe6973a215c47026285c8615b156e6697a914be136f950dd5ac20d"
+        },
+        "large": {
+          "src": "/covers/clipshuttle-800.jpg",
+          "width": 800,
+          "height": 365,
+          "bytes": 21934,
+          "quality": 80,
+          "sha256": "c9d4562bfa774d10f3c065403c30bb87530c2ac718d0347207ab3f84f29b95e5"
+        },
+        "phone": {
+          "src": "/covers/clipshuttle-phone-600.jpg",
+          "width": 600,
+          "height": 200,
+          "bytes": 16346,
+          "quality": 82,
+          "sha256": "80336da82aa7b0ecc84a7cd2acce959fd24fb5f29ba14e275e8e084ca90bc8c3"
+        }
+      },
+      "phone": {
+        "capturedAt": "2026-07-22",
+        "commit": "6306f4b",
+        "state": "The same screenshot, cropped close on the save folder, the import box and the Download button.",
+        "frame": {
+          "width": 600,
+          "height": 200,
+          "scale": 2
+        }
+      }
+    }
+  }
+}

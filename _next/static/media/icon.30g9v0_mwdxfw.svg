@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- The Capsule mark (components/site/CapsuleMark.tsx) for the browser tab. Colours repeat the light tokens in
+       styles/tokens.css (--mark-shell, --mark-edge, --mark-glass, --bot-accent): an icon cannot read the page's CSS. -->
+  <rect x="4.5" y="2.5" width="23" height="27" rx="11.5" fill="#F4F6FA" stroke="#121522" stroke-opacity="0.3" stroke-width="1"/>
+  <rect x="7.5" y="7" width="17" height="11.5" rx="4.75" fill="#161A24"/>
+  <circle cx="12.75" cy="12.75" r="2.25" fill="#3A5BD9"/>
+  <circle cx="19.25" cy="12.75" r="2.25" fill="#3A5BD9"/>
+  <path d="M5.2 21.75H26.8L26.3 23.25H5.7Z" fill="#161A24"/>
+  <rect x="13.5" y="21.75" width="5" height="1.5" fill="#3A5BD9"/>
+</svg>

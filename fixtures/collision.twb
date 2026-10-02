@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<workbook version='18.1'><datasources>
+    <datasource caption='Sales A' name='ds.a'>
+      <column caption='Gross Sales' datatype='real' name='[sales]' role='measure' />
+      <column caption='A Total' datatype='real' name='[Calculation_A]'>
+        <calculation class='tableau' formula='SUM([sales])' />
+      </column>
+    </datasource>
+    <datasource caption='Sales B' name='ds.b'>
+      <column caption='Net Sales' datatype='real' name='[sales]' role='measure' />
+    </datasource></datasources>
+<worksheets><worksheet name='Sheet 1'><table><view>
+  <datasource-dependencies datasource='ds.a'>
+    <column caption='A Total' datatype='real' name='[Calculation_A]' />
+  </datasource-dependencies>
+</view></table></worksheet></worksheets></workbook>
